@@ -54,20 +54,18 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 if (entity == null)
                 {
-                    return BadRequest(new TransactionResponse()
-                    {
-                        Errors = new List<string>() {
-                            "Invalid login request"
-                            },
-                        Success = false
-                    });
+                    ViewBag._isError = true;
+                    ViewBag._message = "Invalid login request";
+
+
+                    return View();
                 }
 
                 var isCorrect = await _userManager.CheckPasswordAsync(entity, loginRequest.Password);
 
                 if (!isCorrect)
                 {
-                    ViewBag._isError = false;
+                    ViewBag._isError = true;
                     ViewBag._message = "Invalid login request";
 
 

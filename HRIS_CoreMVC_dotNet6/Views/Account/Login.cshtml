@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    ViewData["Title"] = "Login";
 }
 
 
@@ -15,10 +16,12 @@
         }
 
         .alert {
+            border-radius: 10px;
             padding: 20px;
-            background-color: #f44336; /* Red */
+            background-color: #ffb84d;
             color: white;
             margin: 10px;
+            text-align:center;
         }
 
 
@@ -27,6 +30,7 @@
             width: 500px;
             margin: 0 auto;
             vertical-align: middle;
+            margin-top:7%;
         }
 
         input[type=text], input[type=password] {
@@ -89,6 +93,8 @@
             }
         }
     </style>
+
+    <title>@ViewData["Title"]</title>
 </head>
 
 <body>
@@ -96,7 +102,8 @@
     @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-signin" }))
     {
         <div class="imgcontainer">
-            <img src="img_avatar2.png" alt="Avatar" class="avatar">
+            <img src="~/employee.png" alt="Avatar" class="avatar" />
+            <p><h3>Welcome to HR Information System</h3></p>
         </div>
 
         @if (ViewBag._isError == true)

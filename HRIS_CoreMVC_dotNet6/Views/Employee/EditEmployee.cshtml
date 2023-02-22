@@ -5,6 +5,13 @@
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
+@{
+    ViewData["Title"] = "Employee";
+    ViewData["Header"] = "Edit Employee";
+
+}
+
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Employee Details</h3>
@@ -49,8 +56,8 @@
 
                     @Html.DropDownListFor(m => m.DepartmentSection.Code,
                 (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
-                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description }),
-                , "--Select--"
+                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+                , "--Select--",
                 new { @id = "ddlSection",@class = "custom-select rounded-0" })
 
                     @Html.ValidationMessageFor(m => m.DepartmentSection.Code, "", new { @class = "text-danger" })
