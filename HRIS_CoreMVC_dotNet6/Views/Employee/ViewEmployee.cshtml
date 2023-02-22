@@ -1,0 +1,56 @@
+﻿@model HRIS.Application.Employees.Dtos.Queries.GetEmployeesDto;
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Employee Details</h3>
+    </div>
+    <div class="card-body">
+
+        @using (Html.BeginForm("ViewEmployee", "Employee", FormMethod.Post, new { id = "form-coex" }))
+        {
+            <label class="col-sm-2 col-form-label">Employee Name</label>
+            <div class="row">
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.LastName, @readonly = "readonly" } })
+                </div>
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.FirstName, @readonly = "readonly" } })
+                </div>
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.MiddleName, @readonly = "readonly" } })
+                </div>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Department</label>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.EditorFor(model => model.Department.Description, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.Department.Description, @readonly = "readonly" } })
+                </div>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Section</label>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.EditorFor(model => model.DepartmentSection.Description, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.DepartmentSection.Description, @readonly = "readonly" } })
+                </div>
+            </div>
+
+            <label class="col-sm-2 col-form-label">CivilStatus</label>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.EditorFor(model => model.CivilStatus.Description, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.CivilStatus.Description, @readonly = "readonly" } })
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-sm-12 align-content-sm-center" style="text-align:center">
+                <a asp-controller="employee" asp-action="ReturnToEmployeeMain" 
+                        class="btn btn-info btninfo-box"
+                        style="width:300px;">Back To List</a>
+            </div>
+        </div>
+    </div>
+</div>

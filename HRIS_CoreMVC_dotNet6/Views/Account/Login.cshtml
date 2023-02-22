@@ -1,0 +1,128 @@
+﻿@{
+    Layout = null;
+}
+
+
+@model HRIS.Application.Common.Models.LoginRequest
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .alert {
+            padding: 20px;
+            background-color: #f44336; /* Red */
+            color: white;
+            margin: 10px;
+        }
+
+
+        form {
+            border: 3px solid #f1f1f1;
+            width: 500px;
+            margin: 0 auto;
+            vertical-align: middle;
+        }
+
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            button:hover {
+                opacity: 0.8;
+            }
+
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+        }
+
+        img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @@media screen and (max-width: 300px) {
+            span.psw {
+                display: block;
+                float: none;
+            }
+
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-signin" }))
+    {
+        <div class="imgcontainer">
+            <img src="img_avatar2.png" alt="Avatar" class="avatar">
+        </div>
+
+        @if (ViewBag._isError == true)
+        {
+            <div class="alert">
+                @ViewBag._message
+            </div>
+        }
+
+        <div class="container">
+
+            @Html.LabelFor(m => m.Username, new { @class = "sr-only" })
+            @Html.EditorFor(m => m.Username, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Username", required = "", autofocus = "" } })
+
+
+            @Html.LabelFor(m => m.Password, new { @class = "sr-only" })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-sm", placeholder = "Password", required = "", autofocus = "" })
+
+            <button type="submit">Login</button>
+
+        </div>
+
+        @*<div class="container" style="background-color:#f1f1f1">
+    <span class="psw">Don't have an account? <a href="#">here</a></span>
+    </div>*@
+    }
+
+</body>
+</html>

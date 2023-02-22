@@ -1,0 +1,113 @@
+﻿@using HRIS.Application.CivilStatuses.Dtos;
+@using HRIS.Application.DepartmentalSections.Dtos.Queries;
+@using HRIS.Application.Departments.Dtos.Queries;
+@model HRIS.Application.Employees.Dtos.Queries.GetEmployeesDto;
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Employee Details</h3>
+    </div>
+    <div class="card-body">
+
+        @using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
+        {
+            <label class="col-sm-2 col-form-label">Employee Name</label>
+            <div class="row">
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.LastName } })
+                </div>
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.FirstName} })
+                </div>
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.MiddleName } })
+                </div>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Department</label>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.DropDownListFor(m => m.Department.Code,
+                (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentDto>>(TempData["__Departments"].ToString()))
+                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+                , "--Select--"
+                , new { @id = "ddlDepartment", @class = "custom-select rounded-0"  })
+                    @Html.ValidationMessageFor(m => m.Department.Code, "", new { @class = "text-danger" })
+                    @{
+                        TempData.Keep("__Departments");
+                    }
+                </div>
+            </div>
+
+            @*, *@
+
+            <label class="col-sm-2 col-form-label">Section</label>
+            <div class="row">
+                <div class="col-sm-12">
+
+                    @Html.DropDownListFor(m => m.DepartmentSection.Code,
+                (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
+                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description }),
+                , "--Select--"
+                new { @id = "ddlSection",@class = "custom-select rounded-0" })
+
+                    @Html.ValidationMessageFor(m => m.DepartmentSection.Code, "", new { @class = "text-danger" })
+                    @{
+                        TempData.Keep("__DepartmentalSection");
+                    }
+
+                </div>
+            </div>
+
+
+
+            <label class="col-sm-2 col-form-label">Civil Status</label>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.DropDownListFor(m => m.CivilStatus.Code,
+                (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
+                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+                , "--Select--"
+                , new { @id = "ddlCivilStatus", @class = "custom-select rounded-0"  })
+                    @Html.ValidationMessageFor(m => m.CivilStatus.Code, "", new { @class = "text-danger" })
+                    @{
+                        TempData.Keep("__CivilStatuses");
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-sm-12 align-content-sm-center" style="text-align:center">
+                <a asp-controller="employee" asp-action="ReturnToEmployeeMain"
+                   class="btn btn-info btninfo-box"
+                   style="width:300px;">Back To List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $('#ddlDepartment').change(function () {
+
+            var code = $('#ddlDepartment').val();
+            $.getJSON("/employee/getsections/" + code, function (data) {
+                var options = $("#ddlSection");
+                $('#ddlSection option').remove();
+                $.each(data, function (key, val) {
+                    options.append($("<option></option>").val(val.code).html(val.description));
+                });
+            });
+        });
+
+
+    </script>
+}
