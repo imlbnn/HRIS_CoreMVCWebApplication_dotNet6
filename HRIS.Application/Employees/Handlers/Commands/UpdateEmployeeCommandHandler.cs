@@ -83,7 +83,7 @@ namespace HRIS.Application.Employees.Handlers.Commands
 
                 var _employee = _mapper.Map<Employee>(request);
 
-                await _employeeRepository.UpdateAsync(_employee);
+                await _employeeRepository.UpdateAsync(_employee, cancellationToken);
 
                 scope.Complete();
 

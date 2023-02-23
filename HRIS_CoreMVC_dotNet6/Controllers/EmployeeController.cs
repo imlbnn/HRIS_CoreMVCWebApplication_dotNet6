@@ -15,6 +15,8 @@ using HRIS.Application.Departments.Dtos.Queries;
 using Newtonsoft.Json;
 using MediatR;
 using HRIS.Application.CivilStatuses.Queries;
+using HRIS.Application.Employees.Dtos.Commands;
+using HRIS.Application.Employees.Commands;
 
 namespace HRIS_CoreMVC_dotNet6.Controllers
 {
@@ -119,7 +121,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
 
         [HttpGet("edit/{empid}")]
-        public async Task<ActionResult<GetEmployeesDto>> EditEmployee(string empid)
+        public async Task<ActionResult> EditEmployee(string empid)
         {
             try
             {
@@ -151,6 +153,40 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 return View();
             }
         }
+
+
+        [HttpPost("edit/{empid}")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditEmployee(string empid, GetEmployeesDto model)
+        {
+            try
+            {
+                await Mediator.Send(new UpdateEmployeeCommand()
+                {
+                    EmpID = empid,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    MiddleName = model.MiddleName,
+                    DepartmentCode = model.Department.Code,
+                    DepartmentSectionCode = model.DepartmentSection.Code,
+                    DateOfBirth = model.DateOfBirth,
+                    CivilStatusCode = model.CivilStatus.Code
+                });
+
+                TempData["IsHasMessage"] = "true";
+                TempData["Message"] = "New employee has been updated";
+
+                return RedirectToAction("");
+            }
+            catch (Exception ex)
+            {
+                ViewBag._isError = true;
+                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return View();
+            }
+        }
+
+
 
 
         [Route("accessdenied")]

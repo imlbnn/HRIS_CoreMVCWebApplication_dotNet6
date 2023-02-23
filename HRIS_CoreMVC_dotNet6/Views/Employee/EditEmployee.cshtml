@@ -9,27 +9,58 @@
     ViewData["Title"] = "Employee";
     ViewData["Header"] = "Edit Employee";
 
+    //if (ViewBag._isError == true)
+    //{
+        //<script type="text/javascript">
+        //    $(document).ready(function () {
+        //        $(document).Toasts('create', {
+        //            class: 'bg-danger',
+        //            title: 'Toast Title',
+        //            subtitle: 'Subtitle',
+        //            body: @ViewBag._message
+        //                })
+        //    });
+        //</script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+                toastr.success('Added');
+
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Toast Title',
+                        subtitle: 'Subtitle',
+                        body: @ViewBag._message
+                            });
+            });
+    </script>
+    //}
 }
 
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Employee Details</h3>
-    </div>
-    <div class="card-body">
 
-        @using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
-        {
-            <label class="col-sm-2 col-form-label">Employee Name</label>
+@using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
+{
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Edit Employee</h3>
+        </div>
+        <div class="card-body">
+
+            @Html.HiddenFor(model => model.SerialID)
+            @Html.HiddenFor(model => model.EmpID)
+            @Html.AntiForgeryToken()
+            <label class="col-sm-12 col-form-label">Employee Name</label>
             <div class="row">
                 <div class="col-sm-4">
-                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.LastName } })
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0"}})
                 </div>
                 <div class="col-sm-4">
-                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.FirstName} })
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0"} })
                 </div>
                 <div class="col-sm-4">
-                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.MiddleName } })
+                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0", } })
                 </div>
             </div>
 
@@ -48,12 +79,10 @@
                 </div>
             </div>
 
-            @*, *@
 
             <label class="col-sm-2 col-form-label">Section</label>
             <div class="row">
                 <div class="col-sm-12">
-
                     @Html.DropDownListFor(m => m.DepartmentSection.Code,
                 (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
                 .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
@@ -67,7 +96,6 @@
 
                 </div>
             </div>
-
 
 
             <label class="col-sm-2 col-form-label">Civil Status</label>
@@ -84,20 +112,45 @@
                     }
                 </div>
             </div>
-        }
-    </div>
 
-    <div class="card-footer">
-        <div class="row">
-            <div class="col-sm-12 align-content-sm-center" style="text-align:center">
-                <a asp-controller="employee" asp-action="ReturnToEmployeeMain"
+            <label class="col-sm-2 col-form-label">Date Of Birth</label>
+            <div class="row">
+                <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
+                    <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
+                    <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <br/>
+            <br/>
+            <button type="button" class="btn btn-danger toastsDefaultDanger">
+                Launch Danger Toast
+            </button>
+
+        </div>
+
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right">
+                    <a asp-controller="employee" asp-action="ReturnToEmployeeMain"
                    class="btn btn-info btninfo-box"
-                   style="width:300px;">Back To List</a>
+                   style="width:200px;">Back To List</a>
+                </div>
+
+                <div class="col-sm-6 align-content-sm-start" style="text-align:left">
+                    <input type="submit" value="Save" class="btn btn-success btninfo-box"
+                       style="width:200px;" />
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+}
 
 
 @section Scripts {
@@ -115,6 +168,25 @@
             });
         });
 
+        //Date picker
+        $('#dateOfBirth').datetimepicker({
+            format: 'L'
+        });
+
+        //window.onload = function() {
+        //    $(document).Toasts('create', {
+        //        class: 'bg-danger',
+        //        title: 'Toast Title',
+        //        subtitle: 'Subtitle',
+        //        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        //    });
+//};
+
+        
+
+                //$('.toastsDefaultDanger').click(function () {
+
+                //});
 
     </script>
 }

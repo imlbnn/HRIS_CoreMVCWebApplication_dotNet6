@@ -1,14 +1,46 @@
 ﻿@using HRIS.Application.Departments.Dtos.Queries;
 
+
 @{
     ViewData["Title"] = "Employee";
     ViewData["Header"] = "Employee List";
-
 
     <div id="employee-list"></div>
 }
 
 @section scripts{
+
+    <style>
+        .alertCustom {
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #ffb84d;
+            color: white;
+            margin: 10px;
+            text-align: center;
+        }
+
+
+        .toastCustom {
+            min-width: 200px;
+        }
+    </style>
+    <script type="text/javascript">
+        var message = '@TempData["Message"]';
+        var val = '@TempData["IsHasMessage"]';
+
+        window.onload = function () {
+            if (val == "true") {
+            $(document).Toasts('create', {
+                class: 'bg-info toastCustom',
+                title: 'Message',
+                subtitle: '',
+                body: message
+            });
+            }
+        }
+    </script>
+
     <script src="~/site/customsite.js"></script>
     <script src="~/site/employees-page.js"></script>
 }

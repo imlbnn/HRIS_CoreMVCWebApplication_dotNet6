@@ -55,7 +55,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 if (entity == null)
                 {
                     ViewBag._isError = true;
-                    ViewBag._message = "Invalid login request";
+                    ViewBag._message = "User does not exist";
 
 
                     return View();
@@ -66,7 +66,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 if (!isCorrect)
                 {
                     ViewBag._isError = true;
-                    ViewBag._message = "Invalid login request";
+                    ViewBag._message = "Invalid password";
 
 
                     return View();
@@ -75,7 +75,6 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 List<Claim> claimsIdentities =  new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, entity.Id),
-                    new Claim(ClaimTypes.GivenName, entity.UserName),
                     new Claim(ClaimTypes.GivenName, entity.UserName),
                     new Claim(ClaimTypes.Email, entity.Email)
                 };
@@ -92,7 +91,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
 
-                return new RedirectResult("/index");
+                return new RedirectResult("/home");
             }
 
 

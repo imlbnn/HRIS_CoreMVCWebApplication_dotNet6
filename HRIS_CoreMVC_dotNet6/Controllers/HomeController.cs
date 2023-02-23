@@ -7,6 +7,7 @@ using System.Drawing.Text;
 
 namespace HRIS_CoreMVC_dotNet6.Controllers
 {
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,7 +19,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpGet("index")]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var data = _httpContextAccessor.HttpContext.Session.GetString("UserId");
