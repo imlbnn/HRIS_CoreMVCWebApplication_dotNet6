@@ -32,10 +32,11 @@ namespace HRIS.Application.Employees.Handlers.Queries
         {
             try
             {
+                /*
+                //Use this format if returning IEnumerable List
                 //var _result = await _employeeRepository.GetAllAsync();
-
-                //var _output = _Mapper.Map<PaginatedList<GetEmployeesDto>>(_result.OrderBy(x=> x.LastName));
-
+                var _output = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result);
+                */
                 var _wherePredicate = PredicateBuilder.New<Employee>();
 
                 var _searchKeys = request.SearchKey.SplitSearchKeys();
@@ -65,11 +66,13 @@ namespace HRIS.Application.Employees.Handlers.Queries
                                             request.PageSize,
                                             cancellationToken);
 
-                var _output = _Mapper.Map<PaginatedList<GetEmployeesDto>>(result);
+                var data = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result.Items);
 
-                return _output;
+                var paginatedList = new PaginatedList<GetEmployeesDto>(data.ToList(), result.TotalCount, result.PageIndex, result.TotalPages);
+
+                return paginatedList;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

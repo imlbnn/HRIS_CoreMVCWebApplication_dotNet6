@@ -17,6 +17,7 @@ using MediatR;
 using HRIS.Application.CivilStatuses.Queries;
 using HRIS.Application.Employees.Dtos.Commands;
 using HRIS.Application.Employees.Commands;
+using HRIS.Application.Common.Models;
 
 namespace HRIS_CoreMVC_dotNet6.Controllers
 {
@@ -48,50 +49,110 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
         [Route("displayall")]
         public async Task<IActionResult> GetAllEmployees(JqueryDatatableParam param)
         {
-            var _result = await Mediator.Send(new GetEmployeesQuery() 
-            { 
-                SearchKey = param.sSearch,
-                OrderBy = "",
-                PageNumber = param.iDisplayStart == 0 ? param.iDisplayStart += 1 : param.iDisplayStart,
-                PageSize = param.iDisplayLength,
+            PaginatedList<GetEmployeesDto> _result;
+            var sortColumnIndex = param.iSortCol_0;
 
-            });
+            var sortDirection = param.sSortDir_0;
 
-            //if (!string.IsNullOrEmpty(param.sSearch))
-            //{
-            //    _result = _result.Where(x => 
-                
-            //    x.FirstName.ToLower().Contains(param.sSearch.ToLower()) ||
-            //    x.MiddleName.ToLower().Contains(param.sSearch.ToLower()) ||
-            //    x.LastName.ToLower().Contains(param.sSearch.ToLower())
+            if (sortColumnIndex == 0)
+            {
+                _result = await Mediator.Send(new GetEmployeesQuery()
+                {
+                    SearchKey = param.sSearch,
+                    OrderBy = "EmpID",
+                    PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
+                    PageSize = param.iDisplayLength,
 
-            //                           ).ToList();
-            //}
+                });
+            }
+            else if (sortColumnIndex == 1)
+            {
+                _result = await Mediator.Send(new GetEmployeesQuery()
+                {
+                    SearchKey = param.sSearch,
+                    OrderBy = "LastName",
+                    PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
+                    PageSize = param.iDisplayLength,
 
-            //var sortColumnIndex = param.iSortCol_0;
+                });
+            }
+            else if (sortColumnIndex == 2)
+            {
+                _result = await Mediator.Send(new GetEmployeesQuery()
+                {
+                    SearchKey = param.sSearch,
+                    OrderBy = "FirstName",
+                    PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
+                    PageSize = param.iDisplayLength,
 
-            //var sortDirection = param.sSortDir_0;
+                });
+            }
 
-            //if (sortColumnIndex == 1)
-            //{
-            //    _result = sortDirection == "asc" ? _result.OrderBy(c => c.LastName) : _result.OrderByDescending(c => c.LastName);
-            //}
-            //else
-            //{
-            //    Func<GetEmployeesDto, string> orderingFunction = e =>
+            else if (sortColumnIndex == 2)
+            {
+                _result = await Mediator.Send(new GetEmployeesQuery()
+                {
+                    SearchKey = param.sSearch,
+                    OrderBy = "MiddleName",
+                    PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
+                    PageSize = param.iDisplayLength,
 
-            //                        sortColumnIndex == 0 ? e.EmpID :
-            //                        sortColumnIndex == 1 ? e.LastName :
-            //                        sortColumnIndex == 2 ? e.FirstName :
-            //                        sortColumnIndex == 3 ? e.MiddleName :
-            //                        e.LastName;
+                });
+            }
 
-            //    _result = sortDirection == "asc" ? _result.OrderBy(orderingFunction) : _result.OrderByDescending(orderingFunction);
-            //}
+            else
+            {
+                _result = await Mediator.Send(new GetEmployeesQuery()
+                {
+                    SearchKey = param.sSearch,
+                    OrderBy = "LastName",
+                    PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
+                    PageSize = param.iDisplayLength,
+
+                });
+            }
 
 
-            //var displayResult = _result.Skip(param.iDisplayStart)
-            //.Take(param.iDisplayLength).ToList();
+
+            /*
+                     //Use This if you are returning IEnumerable List
+                      if (!string.IsNullOrEmpty(param.sSearch))
+                        {
+                            _result = _result.Where(x =>
+
+                            x.FirstName.ToLower().Contains(param.sSearch.ToLower()) ||
+                            x.MiddleName.ToLower().Contains(param.sSearch.ToLower()) ||
+                            x.LastName.ToLower().Contains(param.sSearch.ToLower())
+
+                                                   ).ToList();
+                        }
+
+                        var sortColumnIndex = param.iSortCol_0;
+
+                        var sortDirection = param.sSortDir_0;
+
+                        if (sortColumnIndex == 1)
+                        {
+                            _result = sortDirection == "asc" ? _result.OrderBy(c => c.LastName) : _result.OrderByDescending(c => c.LastName);
+                        }
+                        else
+                        {
+                            Func<GetEmployeesDto, string> orderingFunction = e =>
+
+                                                sortColumnIndex == 0 ? e.EmpID :
+                                                sortColumnIndex == 1 ? e.LastName :
+                                                sortColumnIndex == 2 ? e.FirstName :
+                                                sortColumnIndex == 3 ? e.MiddleName :
+                                                e.LastName;
+
+                            _result = sortDirection == "asc" ? _result.OrderBy(orderingFunction) : _result.OrderByDescending(orderingFunction);
+                        }
+
+
+                        var displayResult = _result.Skip(param.iDisplayStart)
+                        .Take(param.iDisplayLength).ToList();
+            */
+
             var totalRecords = _result.TotalCount;
             var totalFiltered = _result.ItemCount;
 
@@ -180,7 +241,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                     DepartmentCode = _model.DepartmentCode,
                     DepartmentSectionCode = _model.DepartmentSectionCode,
                     DateOfBirth = _model.DateOfBirth
-                }) ;
+                });
 
                 TempData["IsHasError"] = false;
                 TempData["Message"] = "New employee has been created";
@@ -217,10 +278,10 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 model = await Mediator.Send(new GetEmployeeByEmpIDQuery() { EmpID = empid });
 
-                TempData["__DepartmentalSection"] = System.Text.Json.JsonSerializer.Serialize(_sections.Where(x=>x.DepartmentCode == model.Department.Code));
+                TempData["__DepartmentalSection"] = System.Text.Json.JsonSerializer.Serialize(_sections.Where(x => x.DepartmentCode == model.Department.Code));
 
                 TempData["__CivilStatuses"] = System.Text.Json.JsonSerializer.Serialize(_civilStatuses);
-                
+
                 TempData["IsHasError"] = false;
                 return View(model);
             }
@@ -285,6 +346,6 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             }
         }
 
-        
+
     }
 }
