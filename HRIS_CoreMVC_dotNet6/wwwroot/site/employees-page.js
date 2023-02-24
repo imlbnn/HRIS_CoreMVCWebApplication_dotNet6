@@ -93,7 +93,7 @@ function EditEmployee(empId) {
 var Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
-    showConfirmButton: true,
+    showConfirmButton: false,
     timer: 3000
 });
 
@@ -114,30 +114,36 @@ function convertToBoolean(val) {
 window.onload = function () {
 
     if (convertToBoolean(hasError) == true && message != "") {
-        //$(document).Toasts('create', {
-        //    class: 'bg-danger toastCustom',
-        //    title: 'Message',
-        //    subtitle: '',
+        $(document).Toasts('create', {
+            class: 'bg-danger toastCustom',
+            title: 'Error',
+            subtitle: '',
+            body: message,
+            autohide: true,
+            delay: 3000,
+        });
+
+        //Toast.fire({
+        //    icon: 'error',
+        //    title: '',
         //    body: message
         //});
-
-        Toast.fire({
-            icon: 'error',
-            title: message
-        });
     }
     else if (convertToBoolean(hasError) == false && message != "") {
-        //$(document).Toasts('create', {
-        //    class: 'bg-info toastCustom',
-        //    title: 'Message',
-        //    subtitle: '',
+        $(document).Toasts('create', {
+            class: 'bg-info toastCustom',
+            title: 'Message',
+            subtitle: '',
+            body: message,
+            autohide: true,
+            delay: 3000,
+        });
+
+        //Toast.fire({
+        //    icon: 'info',
+        //    title: '',
         //    body: message
         //});
-
-        Toast.fire({
-            icon: 'info',
-            title: message
-        });
     }
 
 }

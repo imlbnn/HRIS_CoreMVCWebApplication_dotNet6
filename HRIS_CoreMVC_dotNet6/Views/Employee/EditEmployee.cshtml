@@ -8,7 +8,7 @@
     ViewData["Header"] = "Edit Employee";
 }
 
-@using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
+@using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-employeedetails" }))
 {
 
     @Html.HiddenFor(model => model.SerialID)
@@ -94,7 +94,7 @@
 @section Scripts {
     <script type="text/javascript">
         var message = '@TempData["Message"]';
-        var val = '@TempData["IsHasError"]';
+        var hasError = '@TempData["IsHasError"]';
     </script>
 
     <script src="~/site/employees-page-edit.js"></script>

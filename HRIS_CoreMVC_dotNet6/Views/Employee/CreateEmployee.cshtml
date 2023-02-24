@@ -3,13 +3,12 @@
 @using HRIS.Application.Departments.Dtos.Queries;
 @model HRIS.Application.Employees.Dtos.Commands.CreateEmployeeDto
 
-
 @{
     ViewData["Title"] = "Employee";
     ViewData["Header"] = "Create Employee";
 }
 
-@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
+@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new { id = "form-employeedetails" }))
 {
     @Html.HiddenFor(model => model.DepartmentCode, new { id = "hdDeptCode" })
     @Html.AntiForgeryToken()
@@ -67,7 +66,7 @@
         <div class="col-sm-4">
             <label class="col-sm-12 col-form-label">Date Of Birth</label>
             <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
-                <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
+                <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" readonly="readonly" />
                 <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>

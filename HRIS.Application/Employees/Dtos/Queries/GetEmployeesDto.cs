@@ -10,8 +10,6 @@ namespace HRIS.Application.Employees.Dtos.Queries
 {
     public class GetEmployeesDto : IMapFrom<Employee>
     {
-        //private string _fullName;
-
         public int SerialID { get; set; }
         public string EmpID { get; set; }
 
@@ -20,16 +18,6 @@ namespace HRIS.Application.Employees.Dtos.Queries
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
-
-        //public string FullName
-        //{
-        //    get => _fullName;
-        //    set
-        //    {
-        //        string name = string.IsNullOrEmpty(MiddleName) ? (LastName + ", " + FirstName) : (LastName + ", " + FirstName + " " + MiddleName);
-        //        value = name;
-        //    }
-        //}
 
         public DateTime DateOfBirth { get; set; }
 

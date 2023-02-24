@@ -48,44 +48,60 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
         [Route("displayall")]
         public async Task<IActionResult> GetAllEmployees(JqueryDatatableParam param)
         {
-            var _result = await Mediator.Send(new GetEmployeesQuery() { });
+            var _result = await Mediator.Send(new GetEmployeesQuery() 
+            { 
+                SearchKey = param.sSearch,
+                OrderBy = "",
+                PageNumber = param.iDisplayStart == 0 ? param.iDisplayStart += 1 : param.iDisplayStart,
+                PageSize = param.iDisplayLength,
 
-            if (!string.IsNullOrEmpty(param.sSearch))
-            {
-                _result = _result.Where(x => x.FirstName.ToLower().Contains(param.sSearch.ToLower())
-                                              ).ToList();
-            }
+            });
 
-            var sortColumnIndex = param.iSortCol_0;
+            //if (!string.IsNullOrEmpty(param.sSearch))
+            //{
+            //    _result = _result.Where(x => 
+                
+            //    x.FirstName.ToLower().Contains(param.sSearch.ToLower()) ||
+            //    x.MiddleName.ToLower().Contains(param.sSearch.ToLower()) ||
+            //    x.LastName.ToLower().Contains(param.sSearch.ToLower())
 
-            var sortDirection = param.sSortDir_0;
+            //                           ).ToList();
+            //}
 
-            if (sortColumnIndex == 2)
-            {
-                _result = sortDirection == "asc" ? _result.OrderBy(c => c.FirstName) : _result.OrderByDescending(c => c.FirstName);
-            }
-            else
-            {
-                Func<GetEmployeesDto, string> orderingFunction = e =>
+            //var sortColumnIndex = param.iSortCol_0;
 
-                                    sortColumnIndex == 0 ? e.EmpID :
-                                    sortColumnIndex == 1 ? e.LastName :
-                                    e.EmpID;
+            //var sortDirection = param.sSortDir_0;
 
-                _result = sortDirection == "asc" ? _result.OrderBy(orderingFunction) : _result.OrderByDescending(orderingFunction);
-            }
+            //if (sortColumnIndex == 1)
+            //{
+            //    _result = sortDirection == "asc" ? _result.OrderBy(c => c.LastName) : _result.OrderByDescending(c => c.LastName);
+            //}
+            //else
+            //{
+            //    Func<GetEmployeesDto, string> orderingFunction = e =>
+
+            //                        sortColumnIndex == 0 ? e.EmpID :
+            //                        sortColumnIndex == 1 ? e.LastName :
+            //                        sortColumnIndex == 2 ? e.FirstName :
+            //                        sortColumnIndex == 3 ? e.MiddleName :
+            //                        e.LastName;
+
+            //    _result = sortDirection == "asc" ? _result.OrderBy(orderingFunction) : _result.OrderByDescending(orderingFunction);
+            //}
 
 
-            var displayResult = _result.Skip(param.iDisplayStart)
-            .Take(param.iDisplayLength).ToList();
-            var totalRecords = _result.Count();
+            //var displayResult = _result.Skip(param.iDisplayStart)
+            //.Take(param.iDisplayLength).ToList();
+            var totalRecords = _result.TotalCount;
+            var totalFiltered = _result.ItemCount;
 
             return Json(new
             {
                 param.sEcho,
                 iTotalRecords = totalRecords,
-                iTotalDisplayRecords = totalRecords,
-                aaData = displayResult
+                iTotalDisplayRecords = totalFiltered,
+                aaData = _result.Items,
+                res = _result.Items
             });
         }
 

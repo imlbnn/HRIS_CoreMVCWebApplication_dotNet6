@@ -24,6 +24,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
     <PackageReference Include="System.Text.Json" Version="6.0.7" />
   </ItemGroup>
 
