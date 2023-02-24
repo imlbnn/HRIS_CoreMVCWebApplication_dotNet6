@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace HRIS.Application.Employees.Handlers.Commands
 {
-    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, CreateEmployeeDto>
+    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, bool>
     {
         private readonly IMapper _mapper;
         private readonly ITransactionScopeFactory _transactionScopeFactory;
@@ -39,17 +39,17 @@ namespace HRIS.Application.Employees.Handlers.Commands
             if (string.IsNullOrEmpty(request.LastName))
                 throw new ValidationException("LastName is required");
 
-            if (string.IsNullOrEmpty(request.LastName))
+            if (string.IsNullOrEmpty(request.FirstName))
                 throw new ValidationException("FirstName is required");
 
             if (string.IsNullOrEmpty(request.DepartmentCode))
-                throw new ValidationException("Department Code is required");
+                throw new ValidationException("Department is required");
 
             if (string.IsNullOrEmpty(request.DepartmentSectionCode))
-                throw new ValidationException("Department Section Code is required");
+                throw new ValidationException("Department Section is required");
 
             if (string.IsNullOrEmpty(request.CivilStatusCode))
-                throw new ValidationException("Civil Status Code is required");
+                throw new ValidationException("Civil Status is required");
             
             if(!request.DateOfBirth.HasValue)
                 throw new ValidationException("Date Of Birth is required");
@@ -58,7 +58,7 @@ namespace HRIS.Application.Employees.Handlers.Commands
         }
 
 
-        public async Task<CreateEmployeeDto> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
             using (var scope = _transactionScopeFactory.Create())
             {
@@ -68,11 +68,9 @@ namespace HRIS.Application.Employees.Handlers.Commands
 
                 var result = await _employeeRepository.AddAsync(_employee);
 
-                var data = _mapper.Map<CreateEmployeeDto>(result);
-
                 scope.Complete();
 
-                return data;
+                return true;
             }
         }
 

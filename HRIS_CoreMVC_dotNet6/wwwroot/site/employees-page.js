@@ -42,7 +42,7 @@ var EmployeeData = function EmployeeData() {
                     return `<a onclick='EditEmployee(this)' href='#'>Edit</a>`;
                 },
                 "orderable": false
-            }        ];
+            }];
         this.generateTable = function (url, containerId, id, addClass, order) {
             var $table = createHTMLTable(containerId, id, this.columns, addClass);
             $table = $table.DataTable({
@@ -66,8 +66,6 @@ var EmployeeData = function EmployeeData() {
 
 }
 
-
-
 var emp = new EmployeeData();
 
 function GenerateList() {
@@ -90,6 +88,58 @@ function EditEmployee(empId) {
     page.EmpID = page.table.row($(empId).closest("tr")).data().empID;
     var url = '/employee/edit/' + page.EmpID;
     window.location.href = url;
+}
+
+var Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: true,
+    timer: 3000
+});
+
+function convertToBoolean(val) {
+    switch (val) {
+        case true:
+        case "true":
+        case 1:
+        case "1":
+        case "on":
+        case "yes":
+            return true;
+        default:
+            return false;
+    }
+}
+
+window.onload = function () {
+
+    if (convertToBoolean(hasError) == true && message != "") {
+        //$(document).Toasts('create', {
+        //    class: 'bg-danger toastCustom',
+        //    title: 'Message',
+        //    subtitle: '',
+        //    body: message
+        //});
+
+        Toast.fire({
+            icon: 'error',
+            title: message
+        });
+    }
+    else if (convertToBoolean(hasError) == false && message != "") {
+        //$(document).Toasts('create', {
+        //    class: 'bg-info toastCustom',
+        //    title: 'Message',
+        //    subtitle: '',
+        //    body: message
+        //});
+
+        Toast.fire({
+            icon: 'info',
+            title: message
+        });
+    }
+
 }
 
 $(document).ready(function () {

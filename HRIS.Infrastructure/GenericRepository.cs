@@ -106,30 +106,24 @@ namespace HRIS.Infrastructure
             {
                 return await GetAllAsync(CancellationToken.None);
             }
-            catch(Exception ex) { throw ex; }
+            catch (Exception ex) { throw ex; }
         }
 
         public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
         {
             await _dbContext.Set<T>().AddAsync(entity);
-            UpdateAuditEntities();  
+            UpdateAuditEntities();
             await _dbContext.SaveChangesAsync(cancellationToken);
             return entity;
         }
-       
+
 
         public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken)
         {
-            try
-            {
-                //_dbContext.Entry(entity).State = EntityState.Modified;
-                UpdateAuditEntities();
-                await _dbContext.SaveChangesAsync(cancellationToken);
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            //_dbContext.Entry(entity).State = EntityState.Modified;
+            UpdateAuditEntities();
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
         }
 
         public virtual async Task DeleteAsync(T entity, CancellationToken cancellationToken)
@@ -145,7 +139,7 @@ namespace HRIS.Infrastructure
             {
                 return await GetQuery.ToListAsync(cancellationToken);
             }
-            catch(Exception ex) { throw ex; }
+            catch (Exception ex) { throw ex; }
         }
 
         public async Task<PaginatedList<T>> GetPaginatedListAsync(int pageNumber, int pageSize)
@@ -238,11 +232,9 @@ namespace HRIS.Infrastructure
         {
             var modifiedEntries = _dbContext.ChangeTracker.Entries()
                 .Where(x => x.Entity is IAuditableEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
-
-
+            
             foreach (var entry in modifiedEntries)
             {
-
                 var entity = (IAuditableEntity)entry.Entity;
                 DateTime now = DateTime.Now;
 
@@ -254,7 +246,7 @@ namespace HRIS.Infrastructure
                 else if (entry.State == EntityState.Modified)
                 {
                     entity.DateModified = now;
-                        entity.ModifiedBy =  _currentUserService.Username;
+                    entity.ModifiedBy = _currentUserService.Username;
                 }
             }
         }

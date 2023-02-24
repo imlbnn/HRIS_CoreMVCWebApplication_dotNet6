@@ -1,5 +1,6 @@
 ﻿using HRIS.API.Controllers;
 using HRIS.Application.Common.Security;
+using HRIS.Application.DepartmentalSections.Queries;
 using HRIS.Application.Departments.Dtos.Queries;
 using HRIS.Application.Departments.Queries;
 using HRIS.Domain.Entities;
@@ -80,6 +81,8 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             }
         }
 
+
+        
 
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace HRIS.Application.Employees.Commands
 {
-    public class CreateEmployeeCommand : IRequest<CreateEmployeeDto>, IMapTo<Employee>
+    public class CreateEmployeeCommand : IRequest<bool>, IMapTo<Employee>
     {
         public string LastName { get; set; }
 
@@ -27,6 +27,10 @@ namespace HRIS.Application.Employees.Commands
         public DateTime? DateOfBirth { get; set; }
 
         public string CivilStatusCode { get; set; }
+
+
+        //public CreateEmployeeDto model { get; set; }
+
 
     }
 }

@@ -5,11 +5,18 @@
     ViewData["Title"] = "Employee";
     ViewData["Header"] = "Employee List";
 
+    <div class="row" style="margin-bottom:20px">
+        <div class="col-sm-12">
+            <a asp-controller="employee" asp-action="create"
+           class="btn btn-info btninfo-box"
+           style="width:200px;">Create New Employee</a>
+        </div>
+    </div>
+
     <div id="employee-list"></div>
 }
 
-@section scripts{
-
+@section Styles{
     <style>
         .alertCustom {
             border-radius: 10px;
@@ -20,29 +27,26 @@
             text-align: center;
         }
 
-
         .toastCustom {
             min-width: 200px;
         }
     </style>
+}
+
+@section scripts{
+
+    
+
     <script type="text/javascript">
         var message = '@TempData["Message"]';
-        var val = '@TempData["IsHasMessage"]';
-
-        window.onload = function () {
-            if (val == "true") {
-            $(document).Toasts('create', {
-                class: 'bg-info toastCustom',
-                title: 'Message',
-                subtitle: '',
-                body: message
-            });
-            }
-        }
+        var val = '@TempData["IsHasError"]';
     </script>
 
     <script src="~/site/customsite.js"></script>
     <script src="~/site/employees-page.js"></script>
+
+
+
 }
 
 

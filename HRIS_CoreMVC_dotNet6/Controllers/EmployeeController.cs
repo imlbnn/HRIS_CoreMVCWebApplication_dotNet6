@@ -120,6 +120,67 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
         }
 
 
+        [HttpGet("create")]
+        public async Task<ActionResult> CreateEmployee()
+        {
+            try
+            {
+                if (!ModelState.IsValid) return View();
+
+                if (!await VerifySession())
+                    return View("../Account/Login");
+
+                var _departments = await Mediator.Send(new GetListofDepartmentQuery() { });
+                var _civilStatuses = await Mediator.Send(new GetListOfCivilStatusQuery() { });
+
+                TempData["__Departments"] = System.Text.Json.JsonSerializer.Serialize(_departments);
+
+                TempData["__CivilStatuses"] = System.Text.Json.JsonSerializer.Serialize(_civilStatuses);
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag._isError = true;
+                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return View();
+            }
+        }
+
+        [HttpPost("create")]
+        public async Task<ActionResult> CreateEmployee(CreateEmployeeDto _model)
+        {
+            try
+            {
+                if (!await VerifySession())
+                    return View("../Account/Login");
+
+                await Mediator.Send(new CreateEmployeeCommand()
+                {
+                    LastName = _model.LastName,
+                    FirstName = _model.FirstName,
+                    MiddleName = _model.MiddleName,
+                    CivilStatusCode = _model.CivilStatusCode,
+                    DepartmentCode = _model.DepartmentCode,
+                    DepartmentSectionCode = _model.DepartmentSectionCode,
+                    DateOfBirth = _model.DateOfBirth
+                }) ;
+
+                TempData["IsHasError"] = false;
+                TempData["Message"] = "New employee has been created";
+
+                return RedirectToAction("");
+            }
+            catch (Exception ex)
+            {
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return View(_model);
+            }
+        }
+
+
+
         [HttpGet("edit/{empid}")]
         public async Task<ActionResult> EditEmployee(string empid)
         {
@@ -143,13 +204,14 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 TempData["__DepartmentalSection"] = System.Text.Json.JsonSerializer.Serialize(_sections.Where(x=>x.DepartmentCode == model.Department.Code));
 
                 TempData["__CivilStatuses"] = System.Text.Json.JsonSerializer.Serialize(_civilStatuses);
-
+                
+                TempData["IsHasError"] = false;
                 return View(model);
             }
             catch (Exception ex)
             {
-                ViewBag._isError = true;
-                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return View();
             }
         }
@@ -173,21 +235,18 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                     CivilStatusCode = model.CivilStatus.Code
                 });
 
-                TempData["IsHasMessage"] = "true";
-                TempData["Message"] = "New employee has been updated";
+                TempData["IsHasError"] = false;
+                TempData["Message"] = "Employee has been updated";
 
                 return RedirectToAction("");
             }
             catch (Exception ex)
             {
-                ViewBag._isError = true;
-                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return View();
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return View(model);
             }
         }
-
-
-
 
         [Route("accessdenied")]
         public IActionResult AccessDenied()
@@ -199,24 +258,17 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
         {
             try
             {
+                TempData["IsHasError"] = false;
                 return View();
             }
             catch (Exception ex)
             {
-                ViewBag._isError = true;
-                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                TempData["IsHasError"] = "true";
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return View();
             }
         }
 
-        [Route("getsections/{code}")]
-        public async Task<IActionResult> FillDepartmentSection(string code)
-        {
-            var _sections = await Mediator.Send(new GetListofDepartmentalSectionQuery() { });
-
-            var sections = _sections.Where(x => x.DepartmentCode == code);
-
-            return Json(sections);
-        }
+        
     }
 }

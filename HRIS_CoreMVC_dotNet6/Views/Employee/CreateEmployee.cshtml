@@ -1,0 +1,99 @@
+﻿@using HRIS.Application.CivilStatuses.Dtos;
+@using HRIS.Application.DepartmentalSections.Dtos.Queries;
+@using HRIS.Application.Departments.Dtos.Queries;
+@model HRIS.Application.Employees.Dtos.Commands.CreateEmployeeDto
+
+
+@{
+    ViewData["Title"] = "Employee";
+    ViewData["Header"] = "Create Employee";
+}
+
+@using (Html.BeginForm("CreateEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
+{
+    @Html.HiddenFor(model => model.DepartmentCode, new { id = "hdDeptCode" })
+    @Html.AntiForgeryToken()
+    <label class="col-sm-12 col-form-label">Employee Name</label>
+    <div class="row">
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0", placeholder="Enter Lastname"}})
+        </div>
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0",placeholder="Enter Firstname"} })
+        </div>
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0",placeholder="Enter Middlename" } })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <label class="col-sm-2 col-form-label">Department</label>
+            @Html.DropDownListFor(m => m.DepartmentCode,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentDto>>(TempData["__Departments"].ToString()))
+        .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+        , "--Select--"
+        , new { @id = "ddlDepartment", @class = "custom-select rounded-0"  })
+            @{
+                TempData.Keep("__Departments");
+            }
+
+        </div>
+
+        <div class="col-sm-4">
+            <label class="col-sm-2 col-form-label">Section</label>
+            @Html.DropDownListFor(m => m.DepartmentSectionCode,
+        Enumerable.Empty<SelectListItem>().Select(r => new SelectListItem { Value = "Code", Text = "Description" })
+        , "--Select--",
+        new { @id = "ddlSection",@class = "custom-select rounded-0" })
+
+        </div>
+
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Civil Status</label>
+            @Html.DropDownListFor(m => m.CivilStatusCode,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
+        .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+        , "--Select--"
+        , new { @id = "ddlCivilStatus", @class = "custom-select rounded-0"  })
+            @{
+                TempData.Keep("__CivilStatuses");
+            }
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Date Of Birth</label>
+            <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
+                <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
+                <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col-sm-6" style="text-align:right">
+            <a asp-controller="employee" asp-action="ReturnToEmployeeMain"
+           class="btn btn-info btninfo-box"
+           style="width:200px;">Back To List</a>
+        </div>
+
+        <div class="col-sm-6 align-content-sm-start" style="text-align:left">
+            <input type="submit" value="Save" class="btn btn-success btninfo-box"
+               style="width:200px;" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        var message = '@TempData["Message"]';
+        var hasError = '@TempData["IsHasError"]';
+    </script>
+
+    <script src="~/site/employees-page-create.js"></script>
+}

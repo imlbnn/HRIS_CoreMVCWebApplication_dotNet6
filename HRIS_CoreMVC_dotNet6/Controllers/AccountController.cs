@@ -15,26 +15,19 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly TokenValidationParameters _tokenValidationParams;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AccountController> _logger;
-        private readonly ApplicationDbContext _apiDbContext;
-        private readonly IJwtTokenGenerator _jWTConfiguration;
 
         public AccountController(
                 UserManager<ApplicationUser> userManager,
                 RoleManager<IdentityRole> roleManager,
-                ILogger<AccountController> logger,
-                ApplicationDbContext apiDbContext
-                , IJwtTokenGenerator jWTConfiguration
+                ILogger<AccountController> logger
                 )
         {
 
             _logger = logger;
             _roleManager = roleManager;
             _userManager = userManager;
-            _apiDbContext = apiDbContext;
-            _jWTConfiguration = jWTConfiguration;
         }
 
 

@@ -105,15 +105,13 @@
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="background-color:white">
 
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            @*<h1>@ViewData["Header"]</h1>*@
-
-
+                            <h1>@ViewData["Header"]</h1>
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->
@@ -170,18 +168,12 @@
     <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
     <!-- SweetAlert2 -->
     <script src="~/plugins/sweetalert2/sweetalert2.min.js"></script>
-
     <!-- Toastr -->
     <script src="~/plugins/toastr/toastr.min.js"></script>
-
-
     <script src="~/dist/js/demo.js"></script>
     <script src="~/dist/js/pages/dashboard3.js"></script>
-
-
     <!-- Select2 -->
     <script src="~/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -201,5 +193,8 @@
     <script src="~/plugins/dropzone/min/dropzone.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Others", required: false)
+    @await RenderSectionAsync("Styles", required: false)
+    
 </body>
 </html>

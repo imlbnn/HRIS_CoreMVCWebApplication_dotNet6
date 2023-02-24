@@ -25,8 +25,6 @@ builder.Services.AddCors();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-builder.Services.AddScoped<IJwtTokenGenerator, JWTTokenGenerator>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

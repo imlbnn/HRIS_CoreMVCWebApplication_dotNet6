@@ -2,152 +2,90 @@
 @using HRIS.Application.DepartmentalSections.Dtos.Queries;
 @using HRIS.Application.Departments.Dtos.Queries;
 @model HRIS.Application.Employees.Dtos.Queries.GetEmployeesDto;
-@using Microsoft.AspNetCore.Http
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "Employee";
     ViewData["Header"] = "Edit Employee";
-
-    //if (ViewBag._isError == true)
-    //{
-        //<script type="text/javascript">
-        //    $(document).ready(function () {
-        //        $(document).Toasts('create', {
-        //            class: 'bg-danger',
-        //            title: 'Toast Title',
-        //            subtitle: 'Subtitle',
-        //            body: @ViewBag._message
-        //                })
-        //    });
-        //</script>
-
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-                toastr.success('Added');
-
-                    $(document).Toasts('create', {
-                        class: 'bg-danger',
-                        title: 'Toast Title',
-                        subtitle: 'Subtitle',
-                        body: @ViewBag._message
-                            });
-            });
-    </script>
-    //}
 }
-
-
 
 @using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-details" }))
 {
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Edit Employee</h3>
+
+    @Html.HiddenFor(model => model.SerialID)
+    @Html.HiddenFor(model => model.EmpID)
+    @Html.AntiForgeryToken()
+    <label class="col-sm-12 col-form-label">Employee Name</label>
+    <div class="row">
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0"}})
         </div>
-        <div class="card-body">
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0"} })
+        </div>
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0", } })
+        </div>
+    </div>
 
-            @Html.HiddenFor(model => model.SerialID)
-            @Html.HiddenFor(model => model.EmpID)
-            @Html.AntiForgeryToken()
-            <label class="col-sm-12 col-form-label">Employee Name</label>
-            <div class="row">
-                <div class="col-sm-4">
-                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control rounded-0"}})
-                </div>
-                <div class="col-sm-4">
-                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control rounded-0"} })
-                </div>
-                <div class="col-sm-4">
-                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control rounded-0", } })
-                </div>
-            </div>
-
-            <label class="col-sm-2 col-form-label">Department</label>
-            <div class="row">
-                <div class="col-sm-12">
-                    @Html.DropDownListFor(m => m.Department.Code,
-                (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentDto>>(TempData["__Departments"].ToString()))
-                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
-                , "--Select--"
-                , new { @id = "ddlDepartment", @class = "custom-select rounded-0"  })
-                    @Html.ValidationMessageFor(m => m.Department.Code, "", new { @class = "text-danger" })
-                    @{
-                        TempData.Keep("__Departments");
-                    }
-                </div>
-            </div>
+    <label class="col-sm-2 col-form-label">Department</label>
+    <div class="row">
+        <div class="col-sm-12">
+            @Html.DropDownListFor(m => m.Department.Code,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentDto>>(TempData["__Departments"].ToString()))
+        .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+        , "--Select--"
+        , new { @id = "ddlDepartment", @class = "custom-select rounded-0"  })
+            
+        </div>
+    </div>
 
 
-            <label class="col-sm-2 col-form-label">Section</label>
-            <div class="row">
-                <div class="col-sm-12">
-                    @Html.DropDownListFor(m => m.DepartmentSection.Code,
-                (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
-                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
-                , "--Select--",
-                new { @id = "ddlSection",@class = "custom-select rounded-0" })
-
-                    @Html.ValidationMessageFor(m => m.DepartmentSection.Code, "", new { @class = "text-danger" })
-                    @{
-                        TempData.Keep("__DepartmentalSection");
-                    }
-
-                </div>
-            </div>
-
-
-            <label class="col-sm-2 col-form-label">Civil Status</label>
-            <div class="row">
-                <div class="col-sm-12">
-                    @Html.DropDownListFor(m => m.CivilStatus.Code,
-                (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
-                .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
-                , "--Select--"
-                , new { @id = "ddlCivilStatus", @class = "custom-select rounded-0"  })
-                    @Html.ValidationMessageFor(m => m.CivilStatus.Code, "", new { @class = "text-danger" })
-                    @{
-                        TempData.Keep("__CivilStatuses");
-                    }
-                </div>
-            </div>
-
-            <label class="col-sm-2 col-form-label">Date Of Birth</label>
-            <div class="row">
-                <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
-                    <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
-                    <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
-            <br/>
-            <br/>
-            <button type="button" class="btn btn-danger toastsDefaultDanger">
-                Launch Danger Toast
-            </button>
+    <label class="col-sm-2 col-form-label">Section</label>
+    <div class="row">
+        <div class="col-sm-12">
+            @Html.DropDownListFor(m => m.DepartmentSection.Code,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
+        .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+        , "--Select--",
+        new { @id = "ddlSection",@class = "custom-select rounded-0" })
 
         </div>
+    </div>
 
-        <div class="card-footer">
-            <div class="row">
-                <div class="col-sm-6" style="text-align:right">
-                    <a asp-controller="employee" asp-action="ReturnToEmployeeMain"
-                   class="btn btn-info btninfo-box"
-                   style="width:200px;">Back To List</a>
-                </div>
 
-                <div class="col-sm-6 align-content-sm-start" style="text-align:left">
-                    <input type="submit" value="Save" class="btn btn-success btninfo-box"
-                       style="width:200px;" />
-                </div>
+    <label class="col-sm-2 col-form-label">Civil Status</label>
+    <div class="row">
+        <div class="col-sm-12">
+            @Html.DropDownListFor(m => m.CivilStatus.Code,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
+        .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
+        , "--Select--"
+        , new { @id = "ddlCivilStatus", @class = "custom-select rounded-0"  })
+            
+        </div>
+    </div>
+
+    <label class="col-sm-2 col-form-label">Date Of Birth</label>
+    <div class="row">
+        <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
+            <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
+            <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top:20px">
+        <div class="col-sm-6" style="text-align:right">
+            <a asp-controller="employee" asp-action="ReturnToEmployeeMain"
+           class="btn btn-info btninfo-box"
+           style="width:200px;">Back To List</a>
+        </div>
+
+        <div class="col-sm-6 align-content-sm-start" style="text-align:left">
+            <input type="submit" value="Save" class="btn btn-success btninfo-box"
+               style="width:200px;" />
         </div>
     </div>
 }
@@ -155,38 +93,9 @@
 
 @section Scripts {
     <script type="text/javascript">
-
-        $('#ddlDepartment').change(function () {
-
-            var code = $('#ddlDepartment').val();
-            $.getJSON("/employee/getsections/" + code, function (data) {
-                var options = $("#ddlSection");
-                $('#ddlSection option').remove();
-                $.each(data, function (key, val) {
-                    options.append($("<option></option>").val(val.code).html(val.description));
-                });
-            });
-        });
-
-        //Date picker
-        $('#dateOfBirth').datetimepicker({
-            format: 'L'
-        });
-
-        //window.onload = function() {
-        //    $(document).Toasts('create', {
-        //        class: 'bg-danger',
-        //        title: 'Toast Title',
-        //        subtitle: 'Subtitle',
-        //        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-        //    });
-//};
-
-        
-
-                //$('.toastsDefaultDanger').click(function () {
-
-                //});
-
+        var message = '@TempData["Message"]';
+        var val = '@TempData["IsHasError"]';
     </script>
+
+    <script src="~/site/employees-page-edit.js"></script>
 }
