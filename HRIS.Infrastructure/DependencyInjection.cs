@@ -52,6 +52,7 @@ namespace HRIS.Infrastructure
                 {
                     option.LoginPath = "/account/login";
                     option.AccessDeniedPath = "/account/accessdenied";
+                    option.ReturnUrlParameter = "/account/login";
                     option.ExpireTimeSpan = TimeSpan.FromDays(1);
                 });
 

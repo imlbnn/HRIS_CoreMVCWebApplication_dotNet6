@@ -27,7 +27,11 @@ namespace HRIS.Application.Employees.Handlers.Queries
 
         public async Task<IEnumerable<GetEmployeesDto>> Handle(GetEmployeeConsistingNameQuery request, CancellationToken cancellationToken)
         {
-            var data = await _employeeRepository.GetAllAsync
+            var data = await _employeeRepository
+                .IncludeDepartment()
+                .IncludeDepartmentSection()
+                .IncludeCivilStatus()
+                            .GetAllAsync
                              (x => (x.FirstName + " " + x.LastName).Contains(request.Name) ||
                              (x.FirstName + " " + x.MiddleName + " " + x.LastName).Contains(request.Name)
                              );

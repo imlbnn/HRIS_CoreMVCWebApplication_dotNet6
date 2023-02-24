@@ -27,22 +27,20 @@
         </div>
     </div>
 
-    <label class="col-sm-2 col-form-label">Department</label>
     <div class="row">
+
         <div class="col-sm-12">
+            <label class="col-sm-12 col-form-label">Department</label>
             @Html.DropDownListFor(m => m.Department.Code,
         (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentDto>>(TempData["__Departments"].ToString()))
         .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
         , "--Select--"
         , new { @id = "ddlDepartment", @class = "custom-select rounded-0"  })
-            
+
         </div>
-    </div>
 
-
-    <label class="col-sm-2 col-form-label">Section</label>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Section</label>
             @Html.DropDownListFor(m => m.DepartmentSection.Code,
         (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
         .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
@@ -50,27 +48,27 @@
         new { @id = "ddlSection",@class = "custom-select rounded-0" })
 
         </div>
-    </div>
 
-
-    <label class="col-sm-2 col-form-label">Civil Status</label>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Civil Status</label>
             @Html.DropDownListFor(m => m.CivilStatus.Code,
         (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
         .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
         , "--Select--"
         , new { @id = "ddlCivilStatus", @class = "custom-select rounded-0"  })
-            
+
         </div>
+
     </div>
 
-    <label class="col-sm-2 col-form-label">Date Of Birth</label>
     <div class="row">
-        <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
-            <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
-            <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Date Of Birth</label>
+            <div class="input-group date" id="dateOfBirth" data-target-input="nearest">
+                <input asp-for="@Model.DateOfBirth" type="text" class="form-control datetimepicker-input" data-target="#dateOfBirth" />
+                <div class="input-group-append" data-target="#dateOfBirth" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
             </div>
         </div>
     </div>

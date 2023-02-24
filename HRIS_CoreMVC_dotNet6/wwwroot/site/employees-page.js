@@ -30,19 +30,19 @@ var EmployeeData = function EmployeeData() {
                 "searchable": true
             },
             {
-                "data": null, "display": "",
+                "data": null, "display": "", innerWidth: "300px", outerWidth:"300px",
                 "render": function (data, type, row, meta) {
-                    return `<a onclick='ViewEmployee(this)' href='#'>View</a>`;
+                    return `<div class='row'>
+                            <div class='col-sm-4'><a onclick='ViewEmployee(this)' href='#'>View</a></div>
+                            <div class='col-sm-4'><a onclick='EditEmployee(this)' href='#'>Edit</a></div>
+                            <div class='col-sm-4'><a onclick='DeleteEmployee(this)' href='#'>Delete</a></div>
+                            </div>`;
                 },
-                "orderable": false
-            },
-            {
-                "data": null, "display": "",
-                "render": function (data, type, row, meta) {
-                    return `<a onclick='EditEmployee(this)' href='#'>Edit</a>`;
-                },
-                "orderable": false
-            }];
+                "orderable": false,
+                "searchable": false
+            }
+
+        ];
         this.generateTable = function (url, containerId, id, addClass, order) {
             var $table = createHTMLTable(containerId, id, this.columns, addClass);
             $table = $table.DataTable({
@@ -90,6 +90,22 @@ function EditEmployee(empId) {
     window.location.href = url;
 }
 
+function DeleteEmployee(empId) {
+    $("#message").empty();
+
+    page.EmpID = page.table.row($(empId).closest("tr")).data().empID;
+
+    var result = confirm("Are you sure you want to delete " + page.EmpID + "?");
+
+    if (result) {
+        var url = '/employee/delete/' + page.EmpID;
+        window.location.href = url;
+    }
+}
+
+
+
+
 var Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -112,6 +128,8 @@ function convertToBoolean(val) {
 }
 
 window.onload = function () {
+
+    //alert(username);
 
     if (convertToBoolean(hasError) == true && message != "") {
         $(document).Toasts('create', {

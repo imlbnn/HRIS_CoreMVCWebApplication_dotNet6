@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Employee";
     ViewData["Header"] = "View Employee";
-
 }
 
 @using (Html.BeginForm("ViewEmployee", "Employee", FormMethod.Post, new { id = "form-employeedetails" }))
@@ -21,26 +20,31 @@
         </div>
     </div>
 
-    <label class="col-sm-2 col-form-label">Department</label>
     <div class="row">
-        <div class="col-sm-12">
+
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Department</label>
             @Html.EditorFor(model => model.Department.Description, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.Department.Description, @readonly = "readonly" } })
         </div>
-    </div>
 
-    <label class="col-sm-2 col-form-label">Section</label>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Section</label>
             @Html.EditorFor(model => model.DepartmentSection.Description, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.DepartmentSection.Description, @readonly = "readonly" } })
         </div>
-    </div>
 
-    <label class="col-sm-2 col-form-label">CivilStatus</label>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">CivilStatus</label>
             @Html.EditorFor(model => model.CivilStatus.Description, new { htmlAttributes = new { @class = "form-control rounded-0", @Value = Model.CivilStatus.Description, @readonly = "readonly" } })
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <label class="col-sm-12 col-form-label">Date Of Birth</label>
+            @Html.EditorFor(model => model.DateOfBirth,"{0:dd/MMM/yyyy}", new { htmlAttributes = new { @class = "form-control rounded-0", @readonly = "readonly" } })
+        </div>
+    </div>
+
 }
 
 <div class="row" style="margin-top:20px">

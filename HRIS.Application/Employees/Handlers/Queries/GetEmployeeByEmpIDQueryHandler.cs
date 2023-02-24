@@ -26,7 +26,11 @@ namespace HRIS.Application.Employees.Handlers.Queries
 
         public async Task<GetEmployeesDto> Handle(GetEmployeeByEmpIDQuery request, CancellationToken cancellationToken)
         {
-            var _result = await _employeeRepository.GetAllAsync(x => x.EmpID == request.EmpID);
+            var _result = await _employeeRepository
+                .IncludeDepartment()
+                .IncludeDepartmentSection()
+                .IncludeCivilStatus()
+                .GetAllAsync(x => x.EmpID == request.EmpID);
 
             var _output = _Mapper.Map<GetEmployeesDto>(_result.FirstOrDefault());
 

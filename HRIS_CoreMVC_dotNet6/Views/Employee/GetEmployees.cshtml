@@ -1,4 +1,5 @@
 ﻿@using HRIS.Application.Departments.Dtos.Queries;
+@inject IHttpContextAccessor _httpAccessor;
 
 
 @{
@@ -14,6 +15,7 @@
     </div>
 
     <div id="employee-list"></div>
+
 }
 
 @section Styles{
@@ -37,6 +39,7 @@
     <script type="text/javascript">
         var message = '@TempData["Message"]';
         var hasError = '@TempData["IsHasError"]';
+        var username = sessionStorage.getItem("UserId");;
     </script>
 
     <script src="~/site/customsite.js"></script>

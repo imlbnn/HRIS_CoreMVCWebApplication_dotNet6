@@ -8,16 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRIS.Application.Employees.Handlers.Commands
 {
-    public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, Tuple<bool,string>>
+    public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, Tuple<bool, string>>
     {
         private readonly IMapper _mapper;
-        private readonly ITransactionScopeFactory _transactionScopeFactory;
         private readonly IEmployeeRepository _employeeRepository;
 
         public DeleteEmployeeCommandHandler(IMapper mapper, ITransactionScopeFactory transactionScopeFactory, IEmployeeRepository employeeRepository)
         {
             _mapper = mapper;
-            _transactionScopeFactory = transactionScopeFactory;
             _employeeRepository = employeeRepository;
         }
 
@@ -28,7 +26,6 @@ namespace HRIS.Application.Employees.Handlers.Commands
 
             return await Task.FromResult(true);
         }
-
 
         public async Task<Tuple<bool, string>> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
         {
@@ -44,7 +41,7 @@ namespace HRIS.Application.Employees.Handlers.Commands
             await _employeeRepository.SoftDeleteAsync(entity);
 
             //Full Delete
-            //await _departmentRepository.DeleteAsync(entity);
+            //await _employeeRepository.DeleteAsync(entity);
 
             return Tuple.Create(true, "Successfully Deleted");
         }

@@ -177,10 +177,6 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 GetEmployeesDto model = new GetEmployeesDto();
 
-                //TempData["__Departments"] = await Mediator.Send(new GetListofDepartmentQuery() { });
-                //TempData["__DepartmentalSection"] = await Mediator.Send(new GetListofDepartmentalSectionQuery() { });
-                //TempData["__CivilStatuses"] = await Mediator.Send(new GetListofDepartmentalSectionQuery() { });
-
                 model = await Mediator.Send(new GetEmployeeByEmpIDQuery() { EmpID = empid });
 
                 if (!await VerifySession())
@@ -257,7 +253,6 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
         }
 
 
-
         [HttpGet("edit/{empid}")]
         public async Task<ActionResult> EditEmployee(string empid)
         {
@@ -324,6 +319,31 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 return View(model);
             }
         }
+
+        [Route("delete/{empid}")]
+        public async Task<IActionResult> DeleteEmployee(string empid)
+        {
+            try
+            {
+                var result = await Mediator.Send(new DeleteEmployeeCommand()
+                {
+                    EmpID = empid
+                });
+
+                TempData["IsHasError"] = false;
+                TempData["Message"] = result.Item2;
+
+                return RedirectToAction("");
+            }
+            catch (Exception ex)
+            {
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return RedirectToAction("");
+            }
+
+        }
+
 
         [Route("accessdenied")]
         public IActionResult AccessDenied()
