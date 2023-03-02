@@ -1,7 +1,6 @@
 ﻿@using HRIS.Application.CivilStatuses.Dtos;
-@using HRIS.Application.DepartmentalSections.Dtos.Queries;
-@using HRIS.Application.Departments.Dtos.Queries;
-@model HRIS.Application.Employees.Dtos.Queries.GetEmployeesDto;
+@using HRIS.Application.Employees.Dtos.Queries;
+@model HRIS.Application.Employees.Dtos.Commands.UpdateEmployeeDto;
 
 @{
     ViewData["Title"] = "Employee";
@@ -11,7 +10,6 @@
 @using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { id = "form-employeedetails" }))
 {
 
-    @Html.HiddenFor(model => model.SerialID)
     @Html.HiddenFor(model => model.EmpID)
     @Html.AntiForgeryToken()
     <label class="col-sm-12 col-form-label">Employee Name</label>
@@ -31,8 +29,8 @@
 
         <div class="col-sm-12">
             <label class="col-sm-12 col-form-label">Department</label>
-            @Html.DropDownListFor(m => m.Department.Code,
-        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentDto>>(TempData["__Departments"].ToString()))
+            @Html.DropDownListFor(m => m.DepartmentCode,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetEmployeeDepartmentDto>>(TempData["__Departments"].ToString()))
         .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
         , "--Select--"
         , new { @id = "ddlDepartment", @class = "custom-select rounded-0"  })
@@ -41,8 +39,8 @@
 
         <div class="col-sm-4">
             <label class="col-sm-12 col-form-label">Section</label>
-            @Html.DropDownListFor(m => m.DepartmentSection.Code,
-        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
+            @Html.DropDownListFor(m => m.DepartmentSectionCode,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetEmployeeDepartmentSectionDto>>(TempData["__DepartmentalSection"].ToString()))
         .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
         , "--Select--",
         new { @id = "ddlSection",@class = "custom-select rounded-0" })
@@ -51,8 +49,8 @@
 
         <div class="col-sm-4">
             <label class="col-sm-12 col-form-label">Civil Status</label>
-            @Html.DropDownListFor(m => m.CivilStatus.Code,
-        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
+            @Html.DropDownListFor(m => m.CivilStatusCode,
+        (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetEmployeeCivilStatusDto>>(TempData["__CivilStatuses"].ToString()))
         .Select(r => new SelectListItem { Value = r.Code, Text = r.Description })
         , "--Select--"
         , new { @id = "ddlCivilStatus", @class = "custom-select rounded-0"  })

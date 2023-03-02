@@ -11,8 +11,21 @@
             <a asp-controller="employee" asp-action="create"
            class="btn btn-info btninfo-box"
            style="width:200px;">Create New Employee</a>
+
+            <input type="button" id="delete" class="btn btn-info btninfo-box"
+                   style="width:200px;"
+                   value="Delete Selected Employees" />
+
+            <!--
+                <div class="form-check">
+                    <input class='checkBox form-check-input' id='chkSelectAll' type='checkbox' />
+                </div>
+            -->
         </div>
+
     </div>
+
+
 
     <div id="employee-list"></div>
 

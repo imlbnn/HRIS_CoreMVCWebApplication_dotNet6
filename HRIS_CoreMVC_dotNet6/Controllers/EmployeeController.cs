@@ -18,6 +18,9 @@ using HRIS.Application.CivilStatuses.Queries;
 using HRIS.Application.Employees.Dtos.Commands;
 using HRIS.Application.Employees.Commands;
 using HRIS.Application.Common.Models;
+using AutoMapper;
+using static Duende.IdentityServer.Models.IdentityResources;
+using NuGet.Protocol;
 
 namespace HRIS_CoreMVC_dotNet6.Controllers
 {
@@ -25,6 +28,11 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
     [Route("[controller]")]
     public class EmployeeController : ApiControllerBase
     {
+        private readonly IMapper mapper;
+        public EmployeeController(IMapper mapper)
+        {
+            this.mapper = mapper;
+        }
 
         [HttpGet]
         [Route("")]
@@ -54,7 +62,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
             var sortDirection = param.sSortDir_0;
 
-            if (sortColumnIndex == 0)
+            if (sortColumnIndex == 2)
             {
                 _result = await Mediator.Send(new GetEmployeesQuery()
                 {
@@ -65,7 +73,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 });
             }
-            else if (sortColumnIndex == 1)
+            else if (sortColumnIndex == 3)
             {
                 _result = await Mediator.Send(new GetEmployeesQuery()
                 {
@@ -76,7 +84,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 });
             }
-            else if (sortColumnIndex == 2)
+            else if (sortColumnIndex == 4)
             {
                 _result = await Mediator.Send(new GetEmployeesQuery()
                 {
@@ -88,12 +96,24 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 });
             }
 
-            else if (sortColumnIndex == 2)
+            else if (sortColumnIndex == 5)
             {
                 _result = await Mediator.Send(new GetEmployeesQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "MiddleName",
+                    PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
+                    PageSize = param.iDisplayLength,
+
+                });
+            }
+
+            else if (sortColumnIndex == 5)
+            {
+                _result = await Mediator.Send(new GetEmployeesQuery()
+                {
+                    SearchKey = param.sSearch,
+                    OrderBy = "Department.Description",
                     PageNumber = (param.iDisplayStart / param.iDisplayLength) + 1,
                     PageSize = param.iDisplayLength,
 
@@ -182,13 +202,15 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 if (!await VerifySession())
                     return View("../Account/Login");
 
+                TempData["IsHasError"] = false;
                 return View(model);
+
             }
             catch (Exception ex)
             {
-                ViewBag._isError = true;
-                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return View();
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return RedirectToAction("");
             }
         }
 
@@ -210,13 +232,15 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 TempData["__CivilStatuses"] = System.Text.Json.JsonSerializer.Serialize(_civilStatuses);
 
+                TempData["IsHasError"] = true;
+
                 return View();
             }
             catch (Exception ex)
             {
-                ViewBag._isError = true;
-                ViewBag._message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return View();
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return RedirectToAction("");
             }
         }
 
@@ -263,7 +287,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 if (!await VerifySession())
                     return View("../Account/Login");
 
-                GetEmployeesDto model = new GetEmployeesDto();
+                UpdateEmployeeDto model = new UpdateEmployeeDto();
 
                 var _departments = await Mediator.Send(new GetListofDepartmentQuery() { });
                 var _sections = await Mediator.Send(new GetListofDepartmentalSectionQuery() { });
@@ -271,9 +295,11 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
                 TempData["__Departments"] = System.Text.Json.JsonSerializer.Serialize(_departments);
 
-                model = await Mediator.Send(new GetEmployeeByEmpIDQuery() { EmpID = empid });
+                var data = await Mediator.Send(new GetEmployeeByEmpIDQuery() { EmpID = empid });
 
-                TempData["__DepartmentalSection"] = System.Text.Json.JsonSerializer.Serialize(_sections.Where(x => x.DepartmentCode == model.Department.Code));
+                model = mapper.Map<UpdateEmployeeDto>(data);
+
+                TempData["__DepartmentalSection"] = System.Text.Json.JsonSerializer.Serialize(_sections.Where(x => x.DepartmentCode == model.DepartmentCode));
 
                 TempData["__CivilStatuses"] = System.Text.Json.JsonSerializer.Serialize(_civilStatuses);
 
@@ -291,7 +317,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
         [HttpPost("edit/{empid}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditEmployee(string empid, GetEmployeesDto model)
+        public async Task<ActionResult> EditEmployee(string empid, UpdateEmployeeDto model)
         {
             try
             {
@@ -301,10 +327,10 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                     LastName = model.LastName,
                     FirstName = model.FirstName,
                     MiddleName = model.MiddleName,
-                    DepartmentCode = model.Department.Code,
-                    DepartmentSectionCode = model.DepartmentSection.Code,
+                    DepartmentCode = model.DepartmentCode,
+                    DepartmentSectionCode = model.DepartmentSectionCode,
                     DateOfBirth = model.DateOfBirth,
-                    CivilStatusCode = model.CivilStatus.Code
+                    CivilStatusCode = model.CivilStatusCode
                 });
 
                 TempData["IsHasError"] = false;
@@ -320,6 +346,34 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             }
         }
 
+        [Route("deleteselected")]
+        public async Task<IActionResult> DeleteEmployee(string[] arrayOfValues)
+        {
+            try
+            {
+                foreach (string employee in arrayOfValues)
+                {
+                    var result = await Mediator.Send(new DeleteEmployeeCommand()
+                    {
+                        EmpID = employee
+                    });
+                }
+
+                TempData["IsHasError"] = false;
+                TempData["Message"] = "Deleted Successfully";
+
+                return View("GetEmployees");
+            }
+            catch (Exception ex)
+            {
+                TempData["IsHasError"] = true;
+                TempData["Message"] = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return RedirectToAction("");
+            }
+
+        }
+
+
         [Route("delete/{empid}")]
         public async Task<IActionResult> DeleteEmployee(string empid)
         {
@@ -333,7 +387,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 TempData["IsHasError"] = false;
                 TempData["Message"] = result.Item2;
 
-                return RedirectToAction("");
+                return View("GetEmployees");
             }
             catch (Exception ex)
             {

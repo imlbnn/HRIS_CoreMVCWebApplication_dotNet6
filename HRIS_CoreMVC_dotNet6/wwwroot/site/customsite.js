@@ -920,7 +920,7 @@ function dtAjaxReload(table, resetPaging = false) {
                 //var pageScrollPos = 0;
                 //pageScrollPos = $('div.dataTables_scrollBody').scrollWidth();
                 var table = $("table[id].dataTable").DataTable(); 
-                table.fixedColumns().update(); 
+                //table.fixedColumns().update(); 
                 // $('div.dataTables_scrollBody').scrollWidth(pageScrollPos);
             }
         }, ".dataTables_wrapper tr");

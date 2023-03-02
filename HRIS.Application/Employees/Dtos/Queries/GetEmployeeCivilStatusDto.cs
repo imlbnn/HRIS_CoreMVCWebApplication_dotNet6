@@ -1,4 +1,5 @@
-﻿using HRIS.Application.Common.Mappings;
+﻿using HRIS.Application.CivilStatuses.Dtos;
+using HRIS.Application.Common.Mappings;
 using HRIS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HRIS.Application.Employees.Dtos.Queries
 {
-    public class GetEmployeeCivilStatusDto : IMapFrom<CivilStatus>
+    public class GetEmployeeCivilStatusDto : IMapFrom<GetCivilStatusDto>
     {
         public string Code { get; set; }
         public string Description { get; set; }

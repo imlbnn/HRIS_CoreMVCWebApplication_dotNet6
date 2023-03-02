@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using HRIS.Application.CivilStatuses.Dtos;
 using HRIS.Application.Common.Mappings;
+using HRIS.Application.DepartmentalSections.Dtos.Queries;
+using HRIS.Application.Departments.Dtos.Queries;
 using HRIS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -30,11 +33,11 @@ namespace HRIS.Application.Employees.Dtos.Queries
 
         public string CivilStatusCode { get; set; }
 
-        public Department Department { get; set; }
+        public GetDepartmentDto Department { get; set; }
 
-        public DepartmentalSection DepartmentSection { get; set; }
+        public GetDepartmentSectionDto DepartmentSection { get; set; }
 
-        public CivilStatus CivilStatus { get; set; }
+        public GetCivilStatusDto CivilStatus { get; set; }
 
         //public void MapFrom(Profile profile)
         //{
