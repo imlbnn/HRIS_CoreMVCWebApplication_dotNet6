@@ -41,10 +41,10 @@ namespace HRIS.Application.Employees.Dtos.Commands
         public string CivilStatusCode { get; set; }
 
 
-        public GetEmployeeDepartmentDto Department { get; set; }
+        //public GetEmployeeDepartmentDto Department { get; set; }
 
-        public GetEmployeeDepartmentSectionDto DepartmentSection { get; set; }
+        //public GetEmployeeDepartmentSectionDto DepartmentSection { get; set; }
 
-        public GetEmployeeCivilStatusDto CivilStatus { get; set; }
+        //public GetEmployeeCivilStatusDto CivilStatus { get; set; }
     }
 }

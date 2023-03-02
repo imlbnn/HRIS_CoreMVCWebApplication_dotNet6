@@ -837,7 +837,7 @@ function dtAjaxReload(table, resetPaging = false) {
             tableId = "table_" + tableCount;
         }
         $("#" + tableContainer).empty();
-        $("#" + tableContainer).append("<table id='" + tableId + "' class='table table-bordered table-hover " + addClass+"' width=100%></table>");    
+        $("#" + tableContainer).append("<table id='" + tableId + "' class='table table-bordered table-hover " + addClass +"'></table>");    
         var $table = $("#" + tableId);
         $table.append("<thead/>");
         var $header = $table.find("thead");

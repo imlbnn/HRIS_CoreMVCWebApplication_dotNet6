@@ -80,7 +80,7 @@ var EmployeeData = function EmployeeData() {
                 "data": "departmentSection.description", "display": "Department Section",
                 "autoWidth": false,
                 "searchable": true,
-                "width": 250
+                "width": 300
             }
             ,
             {
@@ -99,8 +99,8 @@ var EmployeeData = function EmployeeData() {
                 "bServerSide": true,
                 "bProcessing": true,
                 "bSearchable": true,
-                "scrollX": 450,
-                "scrollY": 450,
+                "scrollX": true,
+                "scrollY": 300,
                 "order": [],
                 "language": {
                     "emptyTable": "No record found.",
@@ -112,7 +112,8 @@ var EmployeeData = function EmployeeData() {
                 "search": {
                     "return": true,
                 },
-                "responsive": true
+                "responsive": true,
+                "width": 300
             });
             return $table;
         }
@@ -154,37 +155,6 @@ function DeleteEmployee(empId) {
         window.location.href = url;
     }
 }
-
-
-function DeleteSelectedEmployee(empId) {
-    $("#message").empty();
-
-    page.EmpID = page.table.row($(empId).closest("tr")).data().empID;
-
-    var result = confirm("Are you sure you want to delete " + page.EmpID + "?");
-
-    if (result) {
-        var url = '/employee/delete/' + page.EmpID;
-        window.location.href = url;
-    }
-}
-
-
-//$('#chkSelectAll').click(function () {
-//    if ($(this).is(":checked")) {
-//        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
-
-//        for (var i = 0; i < checkboxes.length; i++)
-//            checkboxes[i].prop("checked", true)
-//    }
-//    else {
-//        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
-
-//        for (var i = 0; i < checkboxes.length; i++)
-//            checkboxes[i].prop("checked", false)
-//    }
-//});
-
 
 $("#delete").click(function () {
     var arrayData = new Array();

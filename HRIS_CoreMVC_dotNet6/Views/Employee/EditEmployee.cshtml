@@ -27,7 +27,7 @@
 
     <div class="row">
 
-        <div class="col-sm-12">
+        <div class="col-sm-4">
             <label class="col-sm-12 col-form-label">Department</label>
             @Html.DropDownListFor(m => m.DepartmentCode,
         (System.Text.Json.JsonSerializer.Deserialize<IEnumerable<GetEmployeeDepartmentDto>>(TempData["__Departments"].ToString()))
