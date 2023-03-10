@@ -30,52 +30,47 @@ namespace HRIS.Application.Employees.Handlers.Queries
 
         public async Task<PaginatedList<GetEmployeesDto>> Handle(GetEmployeesQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                /*
-                //Use this format if returning IEnumerable List
-                //var _result = await _employeeRepository.GetAllAsync();
-                var _output = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result);
-                */
-                var _wherePredicate = PredicateBuilder.New<Employee>();
 
-                var _searchKeys = request.SearchKey.SplitSearchKeys();
-                if (_searchKeys != null && _searchKeys.Any())
+            /*
+            //Use this format if returning IEnumerable List
+            //var _result = await _employeeRepository.GetAllAsync();
+            var _output = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result);
+            */
+            var _wherePredicate = PredicateBuilder.New<Employee>();
+
+            var _searchKeys = request.SearchKey.SplitSearchKeys();
+            if (_searchKeys != null && _searchKeys.Any())
+            {
+                foreach (var _searchKey in _searchKeys)
                 {
-                    foreach (var _searchKey in _searchKeys)
-                    {
-                        _wherePredicate = _wherePredicate
-                            .And(x =>
-                                x.LastName.Contains(_searchKey)
-                                || x.FirstName.Contains(_searchKey)
-                                || x.MiddleName.Contains(_searchKey)
-                                );
-                    }
+                    _wherePredicate = _wherePredicate
+                        .And(x =>
+                            x.LastName.Contains(_searchKey)
+                            || x.FirstName.Contains(_searchKey)
+                            || x.MiddleName.Contains(_searchKey)
+                            );
                 }
-
-                if (!_wherePredicate.IsStarted)
-                    _wherePredicate.And(x => true);
-
-                var result = await _employeeRepository
-                    .IncludeDepartment()
-                    .IncludeDepartmentSection()
-                    .IncludeCivilStatus()
-                    .SetOrderBy(request.OrderBy)
-                    .GetPaginatedListAsync(_wherePredicate,
-                                            request.PageNumber,
-                                            request.PageSize,
-                                            cancellationToken);
-
-                var data = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result.Items);
-
-                var paginatedList = new PaginatedList<GetEmployeesDto>(data.ToList(), result.TotalCount, result.PageIndex, result.TotalPages);
-
-                return paginatedList;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            if (!_wherePredicate.IsStarted)
+                _wherePredicate.And(x => true);
+
+            var result = await _employeeRepository
+                .IncludeDepartment()
+                .IncludeDepartmentSection()
+                .IncludeCivilStatus()
+                .SetOrderBy(request.OrderBy)
+                .GetPaginatedListAsync(_wherePredicate,
+                                        request.PageNumber,
+                                        request.PageSize,
+                                        cancellationToken);
+
+            var data = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result.Items);
+
+            var paginatedList = new PaginatedList<GetEmployeesDto>(data.ToList(), data.Count(), request.PageNumber, request.PageSize); ;
+
+            return paginatedList;
+
         }
     }
 }

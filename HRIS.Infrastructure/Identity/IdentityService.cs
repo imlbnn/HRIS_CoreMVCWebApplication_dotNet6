@@ -38,7 +38,7 @@ namespace HRIS.Infrastructure.Identity
             {
                 if (_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.GivenName) == null)
                 {
-                    _username = "";//_httpContextAccessor.HttpContext.User.FindFirst("Username").Value;
+                    _username = "Default User";//_httpContextAccessor.HttpContext.User.FindFirst("Username").Value;
                 }
                 else
                 {

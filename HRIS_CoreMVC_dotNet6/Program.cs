@@ -15,6 +15,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddCoreMVCAuthentication(builder.Configuration);
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatR(Assembly.Load("HRIS.Application"));
 builder.Services.AddMediatR(Assembly.Load("HRIS.Infrastructure"));
