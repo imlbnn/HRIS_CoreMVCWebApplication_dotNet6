@@ -7,16 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
     <PackageReference Include="Radzen.Blazor" Version="4.7.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HRIS.Application\HRIS.Application.csproj" />
     <ProjectReference Include="..\HRIS.Infrastructure\HRIS.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

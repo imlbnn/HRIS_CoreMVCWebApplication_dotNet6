@@ -87,6 +87,29 @@ namespace HRIS.Infrastructure
             return services;
         }
 
+        public static IServiceCollection AddBlazorAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+            {
+                option.LoginPath = "/account/login";
+                option.AccessDeniedPath = "/account/accessdenied";
+                option.ReturnUrlParameter = "/account/login";
+                option.ExpireTimeSpan = TimeSpan.FromDays(1);
+            });
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+            });
+
+            services.AddDefaultIdentity<ApplicationUser>()
+                       .AddRoles<IdentityRole>()
+                       .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            return services;
+        }
+
         public static IServiceCollection AddWebAPIAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JwtConfig>(configuration.GetSection("JwtConfig"));

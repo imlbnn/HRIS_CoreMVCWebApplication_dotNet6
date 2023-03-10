@@ -2,9 +2,9 @@ using HRIS.Application;
 using HRIS.Application.Common.Interfaces.Services;
 using HRIS.Infrastructure;
 using HRISBlazorServerApp;
-using HRISBlazorServerApp.Data;
 using HRISBlazorServerApp.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Reflection;
@@ -21,8 +21,10 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatR(Assembly.Load("HRIS.Application"));
 builder.Services.AddMediatR(Assembly.Load("HRIS.Infrastructure"));
 builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddUIDependency(builder.Configuration);
+
+builder.Services.AddCors();
+
 
 var app = builder.Build();
 
@@ -40,6 +42,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

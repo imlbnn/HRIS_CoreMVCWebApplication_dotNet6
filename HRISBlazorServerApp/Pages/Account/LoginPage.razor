@@ -1,0 +1,68 @@
+﻿@page "/"
+@layout LoginLayout
+@using HRISBlazorServerApp.Interfaces.Services
+@using HRIS.Application.Common.Models
+@using Blazored.LocalStorage
+@inject IAccountService AuthService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject ILocalStorageService _localStorage
+
+<title>Login</title>
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@Error</p>
+    </div>
+}
+
+<br />
+<br />
+
+<div class="card" style="margin-left:30%; margin-right:30%">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align:center">Login Form</h5>
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <InputText Id="username" Class="form-control" @bind-Value="loginModel.Username" />
+                <ValidationMessage For="@(() => loginModel.Username)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
+                <ValidationMessage For="@(() => loginModel.Password)" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="float:right">SIGN IN</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    private LoginRequest loginModel = new LoginRequest();
+    private bool ShowErrors;
+    private string Error = "";
+
+    private async Task HandleLogin()
+    {
+        ShowErrors = false;
+
+        var result = await AuthService.Login(loginModel);
+
+        if (result == true)
+        {
+            NavigationManager.NavigateTo("/employee");
+        }
+        else
+        {
+            Error = "Invalid Login";
+            ShowErrors = true;
+        }
+    }
+}
+

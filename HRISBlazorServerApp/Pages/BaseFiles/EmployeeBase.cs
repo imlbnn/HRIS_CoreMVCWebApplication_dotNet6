@@ -14,10 +14,6 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
     public class EmployeeBase : PageBase
     {
-        
-
-        
-
         public int count;
 
         public IEnumerable<GetEmployeesDto> getEmployees { get; set; }
