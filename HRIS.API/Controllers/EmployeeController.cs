@@ -18,7 +18,7 @@ namespace HRIS.API.Controllers
         [HttpGet]
         [Route("paged")]
         //Run and use Postman to call this request
-        public async Task<ActionResult<PaginatedList<GetEmployeesDto>>> GetEmployees([FromQuery] GetEmployeesQuery request)
+        public async Task<ActionResult<PaginatedList<GetEmployeesDto>>> GetEmployees([FromQuery] GetEmployeePaginatedQuery request)
         {
             try
             {

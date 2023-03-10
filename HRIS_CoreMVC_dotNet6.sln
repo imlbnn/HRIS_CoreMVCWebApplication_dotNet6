@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRISBlazorApp", "HRISBlazorApp\HRISBlazorApp.csproj", "{F5272516-0F8B-4364-88A5-0B7B1C653C56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRISBlazorServerApp", "HRISBlazorServerApp\HRISBlazorServerApp.csproj", "{E7A0A9FF-FB5B-49D9-BDF6-B0355A1439E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +46,10 @@ Global
 		{850FA2B8-FF0B-4174-9B9A-55F5E7B6F039}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{850FA2B8-FF0B-4174-9B9A-55F5E7B6F039}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{850FA2B8-FF0B-4174-9B9A-55F5E7B6F039}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5272516-0F8B-4364-88A5-0B7B1C653C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5272516-0F8B-4364-88A5-0B7B1C653C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5272516-0F8B-4364-88A5-0B7B1C653C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5272516-0F8B-4364-88A5-0B7B1C653C56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7A0A9FF-FB5B-49D9-BDF6-B0355A1439E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7A0A9FF-FB5B-49D9-BDF6-B0355A1439E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7A0A9FF-FB5B-49D9-BDF6-B0355A1439E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7A0A9FF-FB5B-49D9-BDF6-B0355A1439E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

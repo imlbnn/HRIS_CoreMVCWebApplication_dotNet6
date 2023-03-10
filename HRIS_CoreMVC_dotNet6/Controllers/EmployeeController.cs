@@ -62,7 +62,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
             if (sortColumnIndex == 2)
             {
-                _result = await Mediator.Send(new GetEmployeesQuery()
+                _result = await Mediator.Send(new GetEmployeePaginatedQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "EmpID",
@@ -73,7 +73,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             }
             else if (sortColumnIndex == 3)
             {
-                _result = await Mediator.Send(new GetEmployeesQuery()
+                _result = await Mediator.Send(new GetEmployeePaginatedQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "LastName",
@@ -84,7 +84,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             }
             else if (sortColumnIndex == 4)
             {
-                _result = await Mediator.Send(new GetEmployeesQuery()
+                _result = await Mediator.Send(new GetEmployeePaginatedQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "FirstName",
@@ -96,7 +96,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
             else if (sortColumnIndex == 5)
             {
-                _result = await Mediator.Send(new GetEmployeesQuery()
+                _result = await Mediator.Send(new GetEmployeePaginatedQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "MiddleName",
@@ -108,7 +108,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
             else if (sortColumnIndex == 5)
             {
-                _result = await Mediator.Send(new GetEmployeesQuery()
+                _result = await Mediator.Send(new GetEmployeePaginatedQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "Department.Description",
@@ -120,7 +120,7 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
 
             else
             {
-                _result = await Mediator.Send(new GetEmployeesQuery()
+                _result = await Mediator.Send(new GetEmployeePaginatedQuery()
                 {
                     SearchKey = param.sSearch,
                     OrderBy = "LastName",
