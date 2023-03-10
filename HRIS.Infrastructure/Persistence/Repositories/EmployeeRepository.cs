@@ -6,16 +6,20 @@ using HRIS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core.Exceptions;
 using System.Linq.Dynamic.Core;
+using System.Data.SqlClient;
 
 namespace HRIS.Infrastructure.Persistence.Repositories
 {
     public class EmployeeRepository : GenericRepositoryAsync<Employee>, IEmployeeRepository
     {
+        private ApplicationDbContext _dbContext;
+
         public EmployeeRepository(ApplicationDbContext dbContext,
                                   IDateTime dateTimeService,
                                   ICurrentUserService currentUserService)
                                   : base(dbContext, dateTimeService, currentUserService)
         {
+            _dbContext = dbContext;
             SetGetQuery(dbContext.Set<Employee>().Where(x => x.IsDeleted == false));
         }
 
@@ -39,16 +43,10 @@ namespace HRIS.Infrastructure.Persistence.Repositories
 
         public IEmployeeRepository SetOrderBy(string orderBy)
         {
-            try
-            {
-                var _orderBy = orderBy.HandleNullableOrderBy();
-                if (!string.IsNullOrEmpty(_orderBy))
-                    SetGetQuery(GetQuery.OrderBy(_orderBy));
-            }
-            catch (ParseException ex)
-            {
-                throw;
-            }
+            var _orderBy = orderBy.HandleNullableOrderBy();
+            
+            if (!string.IsNullOrEmpty(_orderBy))
+                SetGetQuery(GetQuery.OrderBy(_orderBy));
 
             return this;
         }

@@ -60,8 +60,6 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
             PaginatedList<GetEmployeesDto> _result;
             var sortColumnIndex = param.iSortCol_0;
 
-            var sortDirection = param.sSortDir_0;
-
             if (sortColumnIndex == 2)
             {
                 _result = await Mediator.Send(new GetEmployeesQuery()
