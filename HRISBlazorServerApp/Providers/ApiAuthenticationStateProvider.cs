@@ -1,4 +1,4 @@
-﻿using HRISBlazorServerApp.Model;
+﻿using HRISBlazorServerApp.Models;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;

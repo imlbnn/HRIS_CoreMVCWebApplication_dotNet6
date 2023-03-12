@@ -1,8 +1,8 @@
 ﻿@page "/"
 @layout LoginLayout
 @using HRISBlazorServerApp.Interfaces.Services
-@using HRIS.Application.Common.Models
 @using Blazored.LocalStorage
+@using HRISBlazorServerApp.Models;
 @inject IAccountService AuthService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
@@ -54,7 +54,7 @@
 
         var result = await AuthService.Login(loginModel);
 
-        if (result == true)
+        if (result.Success)
         {
             NavigationManager.NavigateTo("/employee");
         }

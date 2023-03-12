@@ -27,26 +27,24 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         private IQueryable<GetEmployeesDto> _query;
 
 
-        //public async Task LoadData(LoadDataArgs args)
-        //{
+        public async Task LoadData(LoadDataArgs args)
+        {
 
-        //    _query = (await employeeService.GetEmployees()).AsQueryable();
+            _query = (await employeeService.GetEmployees()).AsQueryable();
 
-        //    count = _query.Count();
+            count = _query.Count();
 
-        //    getEmployees = _query
-        //        .Skip(args.Skip.Value)
-        //        .Take(args.Top.Value)
-        //        .ToList();
+            getEmployees = _query
+                .Skip(args.Skip.Value)
+                .Take(args.Top.Value)
+                .ToList();
 
 
-        //}
+        }
 
         protected override async Task OnInitializedAsync()
         {
-            _query = (await employeeService.GetEmployees()).AsQueryable();
-
-            getEmployees = _query.ToList();
+            //_query = (await employeeService.GetEmployees()).AsQueryable();
         }
     }
 }

@@ -1,16 +1,7 @@
-﻿@*@page "/"
-@namespace HRISBlazorServerApp.Pages
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    Layout = "_Layout";
-}
-
-<component type="typeof(App)" render-mode="ServerPrerendered" />*@
-
-@page "/"
-@namespace HRIS.Blazor.Pages
+﻿@page "/"
 @using HRISBlazorServerApp;
 @using Microsoft.AspNetCore.Authentication
+@namespace HRISBlazorServerApp.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -23,14 +14,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <base href="~/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
-    <link href="css/site.css" rel="stylesheet" />
-    <link href="HRIS.Blazor.styles.css" rel="stylesheet" />
+    <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="HRISBlazorServerApp.styles.css" rel="stylesheet" />
 </head>
 <body>
     @{
 
-        //var accessToken = await HttpContext.GetTokenAsync("access_token");
+        var accessToken = await HttpContext.GetTokenAsync("access_token");
     }
 
     <component type="typeof(App)" render-mode="Server" />
@@ -47,8 +38,6 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
-
-
 
 </body>
 </html>

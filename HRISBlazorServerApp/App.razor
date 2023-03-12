@@ -13,18 +13,18 @@
 
 
 
-@using HRISBlazorServerApp.Model
+@using HRISBlazorServerApp.Models
 @inject TokenProvider TokenProvider
 
 @code
 {
-    //[Parameter]
-    //public string AccessToken { get; set; }
+    [Parameter]
+    public string AccessToken { get; set; }
 
     protected override void OnInitialized()
     {
         //Accept the parameter from _Host.cshtml and move into the Token Provider
-        //TokenProvider.AccessToken = AccessToken;
+        TokenProvider.AccessToken = AccessToken;
         base.OnInitialized();
     }
 }
