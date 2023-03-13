@@ -1,5 +1,4 @@
-﻿using HRIS.Application.Common.Exceptions;
-using HRIS.Application.Common.Interfaces.Services;
+﻿using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Models;
 using System.Net.Http.Headers;
 
@@ -20,7 +19,6 @@ namespace HRISBlazorServerApp.Services
         {
             var _accessToken = tokenProvider.AccessToken;
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task ThrowAPIErrorException(HttpResponseMessage response)

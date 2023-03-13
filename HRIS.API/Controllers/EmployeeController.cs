@@ -81,9 +81,6 @@ namespace HRIS.API.Controllers
         }
 
 
-
-
-
         [HttpPost("create")]
         //Run and use Postman to call this request
         public async Task<ActionResult<bool>> CreateEmployee(CreateEmployeeCommand request)
@@ -99,7 +96,7 @@ namespace HRIS.API.Controllers
             }
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         //Run and use Postman to call this request
         public async Task<ActionResult<Tuple<bool, string>>> UpdateEmployee(UpdateEmployeeCommand request)
         {

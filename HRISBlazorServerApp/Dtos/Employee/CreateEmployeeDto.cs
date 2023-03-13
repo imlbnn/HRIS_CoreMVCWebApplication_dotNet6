@@ -1,6 +1,4 @@
-﻿using HRIS.Application.Common.Mappings;
-using HRIS.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;

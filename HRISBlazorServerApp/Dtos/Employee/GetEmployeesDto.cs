@@ -1,6 +1,4 @@
 ﻿
-using HRIS.Application.Employees.Dtos.Queries;
-
 namespace HRISBlazorServerApp.Dtos.Employee
 {
     public class GetEmployeesDto

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blazored.LocalStorage;
+using HRISBlazorServerApp.APISettings;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Models;
 using HRISBlazorServerApp.Providers;
@@ -11,90 +12,57 @@ using System.Net.Http.Json;
 
 namespace HRISBlazorServerApp.Services.Page
 {
-    public class AccountService : IAccountService
+    public class AccountService : ApiServiceBase, IAccountService
     {
         private readonly TokenProvider tokenProvider;
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
-        private readonly IConfiguration _config;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly string _baseUrl;
-
 
         public AccountService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
-                           ILocalStorageService localStorage, 
-                           IConfiguration configuration,
-                           IHttpContextAccessor HttpContextAccessor,
-                           TokenProvider _tokenProvider)
+                           ILocalStorageService localStorage,
+                           TokenProvider _tokenProvider) 
+            : base(_tokenProvider, httpClient)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
-            _config = configuration;
-            httpContextAccessor = HttpContextAccessor;
             tokenProvider = _tokenProvider;
-            _baseUrl = _config.GetValue<string>("HRISBaseUrl");
         }
 
         public async Task<LoginResult> Login(LoginRequest loginRequest)
         {
-            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}api/authentication/login", loginRequest);
+            var _url = $"api/authentication/login";
 
-            LoginResult loginResult = new LoginResult();
+            _httpClient.DefaultRequestHeaders.Authorization = null;
 
-            if (response.IsSuccessStatusCode)
-            {
-                loginResult = JsonConvert.DeserializeObject<LoginResult>(await response.Content.ReadAsStringAsync());
+            tokenProvider.AccessToken = string.Empty;
 
-                tokenProvider.AccessToken = loginResult.Token;
+            var _result = await base.PostAsync<LoginRequest, LoginResult>(_url.ToString(), loginRequest);
 
-                var user = await GetUserDetails(loginRequest.Username);
+            tokenProvider.AccessToken = _result.Token;
 
-                if (user.ContainsKey("email"))
-                {
-                    ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(user["email"].ToString());
+            var user = await GetUserDetails(loginRequest.Username);
 
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
+            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(user.Email);
 
-                    return loginResult;
-                }
-            }
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", _result.Token);
 
-            throw new Exception("Invalid Login");
+            return _result;
         }
 
 
-        private async Task<Dictionary<string, string>> GetUserDetails(string username)
+        private async Task<ApplicationUser> GetUserDetails(string username)
         {
-            UriBuilder usrUrl = new UriBuilder(_baseUrl)
-            {
-                Path = "api/authentication/GetUserByUsername",
-                Query = "username=" + username
-            };
+            var _url = $"api/authentication/GetUserByUsername?username={username}";
 
-            // Add an Accept header for JSON format.
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var user = await base.GetAsync<ApplicationUser>(_url.ToString(), true);
 
-            HttpResponseMessage response = await _httpClient.GetAsync(usrUrl.ToString()).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                var user = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(user);
-
-                if (!result.ContainsKey("email"))
-                    throw new ApplicationException("No User Found");
-
-                return result;
-
-            }
-            else
-            {
+            if (string.IsNullOrEmpty(user.Email))
                 throw new ApplicationException("No User Found");
-            }
 
+            return user;
         }
 
         public async Task Logout()

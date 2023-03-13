@@ -1,42 +1,43 @@
 ﻿using AutoMapper;
 using HRISBlazorServerApp.Dtos.Employee;
+using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Models;
-using MediatR;
-using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace HRISBlazorServerApp.Services.Page
 {
     public class EmployeeService : ApiServiceBase, IEmployeeService
     {
-        private readonly string baseUrl;
-        private readonly IConfiguration _config;
-
-        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration configuration)
+        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient)
             : base(tokenProvider, httpClient)
         {
-            _config = configuration;
-            //baseUrl = _config.GetValue<string>("HRISBaseUrl");
         }
 
         public async Task<IEnumerable<GetEmployeesDto>> GetEmployees()
         {
             try
             {
-                //UriBuilder _url = new UriBuilder(baseUrl)
-                //{
-                //    Path = "api/employee"
-                //};
-
                 var _url = "api/employee";
 
                 var _result = await base.GetAsync<IEnumerable<GetEmployeesDto>>(_url.ToString(), true);
 
                 return _result;
             }
-            catch (Exception ex)
+            catch (ApplicationException)
             {
-                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (NotFoundException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -44,20 +45,27 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                //UriBuilder _url = new UriBuilder(baseUrl)
-                //{
-                //    Path = $"api/employee/{empid}"
-                //};
-
                 var _url = $"api/employee/{empid}";
 
                 var _result = await base.GetAsync<GetEmployeesDto>(_url.ToString(), true);
 
                 return _result;
             }
-            catch (Exception ex)
+            catch (ApplicationException)
             {
-                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (NotFoundException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -65,11 +73,6 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                //UriBuilder _url = new UriBuilder(baseUrl)
-                //{
-                //    Path = $"api/employee/create"
-                //};
-
                 var _url = $"api/employee/create";
 
 
@@ -77,13 +80,21 @@ namespace HRISBlazorServerApp.Services.Page
 
                 return _result;
             }
-            catch (ApplicationException ex)
+            catch (ApplicationException)
             {
-                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
             }
-            catch (Exception ex)
+            catch (ValidationException)
             {
-                throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
+            }
+            catch (NotFoundException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -91,24 +102,27 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                //UriBuilder _url = new UriBuilder(baseUrl)
-                //{
-                //    Path = $"api/employee/update"
-                //};
-
                 var _url = $"api/employee/update";
 
                 var _result = await base.PutAsync<UpdateEmployeeDto, Tuple<bool, string>>(_url.ToString(), request);
 
                 return _result;
             }
-            catch (ApplicationException ex)
+            catch (ApplicationException)
             {
-                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
             }
-            catch (Exception ex)
+            catch (ValidationException)
             {
-                throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
+            }
+            catch (NotFoundException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -117,25 +131,27 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                //UriBuilder _url = new UriBuilder(baseUrl)
-                //{
-                //    Path = $"api/employee/archive/{empid}"
-                //};
-
-
                 var _url =  $"api/employee/archive/{empid}";
                 
                 var _result = await base.PutAsync(_url.ToString(), true);
 
                 return _result;
             }
-            catch (ApplicationException ex)
+            catch (ApplicationException)
             {
-                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
             }
-            catch (Exception ex)
+            catch (ValidationException)
             {
-                throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                throw;
+            }
+            catch (NotFoundException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

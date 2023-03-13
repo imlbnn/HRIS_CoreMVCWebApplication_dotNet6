@@ -1,5 +1,4 @@
 using AutoMapper;
-using HRIS.Domain.Entities;
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -7,13 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
+    <PackageReference Include="FluentValidation" Version="11.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Radzen.Blazor" Version="4.7.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\HRIS.Application\HRIS.Application.csproj" />
-    <ProjectReference Include="..\HRIS.Infrastructure\HRIS.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
