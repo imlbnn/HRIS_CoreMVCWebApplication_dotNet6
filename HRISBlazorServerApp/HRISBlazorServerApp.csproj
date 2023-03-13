@@ -16,4 +16,8 @@
     <ProjectReference Include="..\HRIS.Infrastructure\HRIS.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\CivilStatus\" />
+  </ItemGroup>
+
 </Project>

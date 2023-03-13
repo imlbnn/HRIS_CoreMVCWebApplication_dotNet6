@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HRIS.Application.Employees.Dtos.Queries
 {
-    public class GetEmployeeCivilStatusDto : IMapFrom<GetCivilStatusDto>
+    public class GetEmployeeCivilStatusDto : IMapFrom<CivilStatus>
     {
         public string Code { get; set; }
         public string Description { get; set; }

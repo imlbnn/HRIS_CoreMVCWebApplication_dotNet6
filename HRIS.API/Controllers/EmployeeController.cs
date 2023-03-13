@@ -32,9 +32,25 @@ namespace HRIS.API.Controllers
             }
         }
 
+        [HttpGet]
+        //Run and use Postman to call this request
+        public async Task<ActionResult<IEnumerable<GetEmployeesDto>>> GetEmployees()
+        {
+            try
+            {
+                var _result = await Mediator.Send(new GetEmployeesQuery() { });
+
+                return Ok(_result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
+
         [HttpGet("{empid}")]
         //Run and use Postman to call this request
-        public async Task<ActionResult<IEnumerable<GetEmployeesDto>>> GetEmployeeByEmpID(string empid)
+        public async Task<ActionResult<GetEmployeesDto>> GetEmployeeByEmpID(string empid)
         {
             try
             {
@@ -70,7 +86,7 @@ namespace HRIS.API.Controllers
 
         [HttpPost("create")]
         //Run and use Postman to call this request
-        public async Task<ActionResult<CreateEmployeeDto>> CreateEmployee(CreateEmployeeCommand request)
+        public async Task<ActionResult<bool>> CreateEmployee(CreateEmployeeCommand request)
         {
             try
             {
@@ -85,7 +101,7 @@ namespace HRIS.API.Controllers
 
         [HttpPost("update")]
         //Run and use Postman to call this request
-        public async Task<ActionResult<CreateEmployeeDto>> UpdateEmployee(UpdateEmployeeCommand request)
+        public async Task<ActionResult<Tuple<bool, string>>> UpdateEmployee(UpdateEmployeeCommand request)
         {
             try
             {

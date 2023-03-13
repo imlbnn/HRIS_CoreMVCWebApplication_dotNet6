@@ -35,6 +35,9 @@ namespace HRIS.Application.Employees.Handlers.Queries
                 .IncludeDepartmentSection()
                 .IncludeCivilStatus().GetAllAsync();
 
+
+            var daasd = result.ToList();
+
             var data = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result);
 
             return data;

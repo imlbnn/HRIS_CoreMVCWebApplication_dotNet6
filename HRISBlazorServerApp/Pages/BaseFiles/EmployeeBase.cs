@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HRIS.Application.Employees.Dtos.Queries;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Services.Page;
 using HRISBlazorServerApp.Pages.BaseFiles;
@@ -8,6 +7,7 @@ using Microsoft.JSInterop;
 using Radzen;
 using Radzen.Blazor;
 using System.ComponentModel.Design;
+using HRISBlazorServerApp.Dtos.Employee;
 
 namespace HRISBlazorServerApp.Pages.BaseFiles
 {
@@ -29,22 +29,35 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
         public async Task LoadData(LoadDataArgs args)
         {
+            var data = (await employeeService.GetEmployees());
 
-            //_query = (await employeeService.GetEmployees()).AsQueryable();
-
-            //count = _query.Count();
-
-            //getEmployees = _query
-            //    .Skip(args.Skip.Value)
-            //    .Take(args.Top.Value)
-            //    .ToList();
-
-
+            getEmployees = data;
         }
 
         protected override async Task OnInitializedAsync()
         {
-            //_query = (await employeeService.GetEmployees()).AsQueryable();
+            //var data = (await employeeService.GetEmployees());
+
+            //getEmployees = data;
+
+
+            CreateEmployeeDto dto = new CreateEmployeeDto()
+            {
+                LastName = "asdasd",
+                FirstName = "Test",
+                MiddleName = "Test",
+                DepartmentCode = "I",
+                DepartmentSectionCode = "02",
+                DateOfBirth = DateTime.Now,
+                CivilStatusCode = "04"  
+            };
+
+
+            var asd = await employeeService.CreateEmployee(dto);
+
+            var res = asd;
+
+
         }
     }
 }

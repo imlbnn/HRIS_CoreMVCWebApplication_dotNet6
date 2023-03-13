@@ -6,10 +6,12 @@ using HRISBlazorServerApp.Models;
 using HRISBlazorServerApp.Providers;
 using HRISBlazorServerApp.Services;
 using HRISBlazorServerApp.Services.Page;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Radzen;
+using System.Net.Http.Headers;
 
 namespace HRISBlazorServerApp
 {
@@ -56,12 +58,8 @@ namespace HRISBlazorServerApp
                 options.IdleTimeout = TimeSpan.FromHours(2);
             });
 
-           
-
             return services;
         }
-
-
 
         public static IServiceCollection AddRadzenDependency(this IServiceCollection services)
         {

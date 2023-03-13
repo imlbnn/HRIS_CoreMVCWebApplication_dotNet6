@@ -33,11 +33,11 @@ namespace HRIS.Application.Employees.Dtos.Queries
 
         public string CivilStatusCode { get; set; }
 
-        public GetDepartmentDto Department { get; set; }
+        public GetEmployeeDepartmentDto Department { get; set; }
 
-        public GetDepartmentSectionDto DepartmentSection { get; set; }
+        public GetEmployeeDepartmentSectionDto DepartmentSection { get; set; }
 
-        public GetCivilStatusDto CivilStatus { get; set; }
+        public GetEmployeeCivilStatusDto CivilStatus { get; set; }
 
         //public void MapFrom(Profile profile)
         //{

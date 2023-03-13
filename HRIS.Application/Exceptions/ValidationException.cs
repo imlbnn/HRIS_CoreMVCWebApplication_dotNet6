@@ -14,6 +14,12 @@ public class ValidationException : Exception
         : base(error) { }
 
 
+    public ValidationException(IDictionary<string, string[]> errors)
+           : this()
+    {
+        Errors = errors;
+    }
+
     public ValidationException(IEnumerable<ValidationFailure> failures)
         : this()
     {

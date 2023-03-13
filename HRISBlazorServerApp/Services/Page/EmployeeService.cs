@@ -1,117 +1,131 @@
 ﻿using AutoMapper;
+using HRISBlazorServerApp.Dtos.Employee;
 using HRISBlazorServerApp.Interfaces.Services;
+using HRISBlazorServerApp.Models;
 using MediatR;
-using System.Web.Mvc;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace HRISBlazorServerApp.Services.Page
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService : ApiServiceBase, IEmployeeService
     {
-        private readonly ISender _mediator;
-        
-        public EmployeeService(ISender mediator)
+        private readonly string baseUrl;
+        private readonly IConfiguration _config;
+
+        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration configuration) 
+            : base(tokenProvider, httpClient)
         {
-            _mediator = mediator;
+            _config= configuration;
+            baseUrl = _config.GetValue<string>("HRISBaseUrl");
         }
 
-        //public async Task<IEnumerable<GetEmployeesDto>> GetEmployees()
-        //{
-        //    try
-        //    {
-        //        //var _result = await _mediator.Send(new GetEmployeesQuery() { });
+        public async Task<IEnumerable<GetEmployeesDto>> GetEmployees()
+        {
+            try
+            {
+                UriBuilder _url = new UriBuilder(baseUrl)
+                {
+                    Path = "api/employee"
+                };
 
-        //        //return _result;
+                var _result = await base.GetAsync<IEnumerable<GetEmployeesDto>>(_url.ToString(), true);
+
+                return _result;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
+
+        public async Task<GetEmployeesDto> GetEmployeeByEmpID(string empid)
+        {
+            try
+            {
+                UriBuilder _url = new UriBuilder(baseUrl)
+                {
+                    Path = $"api/employee/{empid}"
+                };
+
+                var _result = await base.GetAsync<GetEmployeesDto>(_url.ToString(), true);
+
+                return _result;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
+
+        public async Task<bool> CreateEmployee(CreateEmployeeDto request)
+        {
+            try
+            {
+                UriBuilder _url = new UriBuilder(baseUrl)
+                {
+                    Path = $"api/employee/create"
+                };
+
+                var _result = await base.PostAsync<CreateEmployeeDto, bool>(_url.ToString(), request);
+
+                return _result;
+            }
+            catch (ApplicationException ex)
+            {
+                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
+
+        public async Task<Tuple<bool, string>> UpdateEmployee(UpdateEmployeeDto request)
+        {
+            try
+            {
+                UriBuilder _url = new UriBuilder(baseUrl)
+                {
+                    Path = $"api/employee/update"
+                };
+
+                var _result = await base.PutAsync<UpdateEmployeeDto, Tuple<bool, string>>(_url.ToString(), request);
+
+                return _result;
+            }
+            catch (ApplicationException ex)
+            {
+                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
 
 
-        //        return null;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-        //    }
-        //}
+        public async Task<bool> ArchiveEmployee(string empid)
+        {
+            try
+            {
+                UriBuilder _url = new UriBuilder(baseUrl)
+                {
+                    Path = $"api/employee/archive/{empid}"
+                };
 
-        //public async Task<GetEmployeesDto> GetEmployeeByEmpID(string empid)
-        //{
-        //    try
-        //    {
-        //        //var _result = await _mediator.Send(new GetEmployeeByEmpIDQuery() { EmpID = empid });
+                var _result = await base.PutAsync(_url.ToString(), true);
 
-        //        //return _result;
-
-        //        return null;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-        //    }
-        //}
-
-        //public async Task<bool> CreateEmployee(CreateEmployeeDto request)
-        //{
-        //    try
-        //    {
-        //        //var data = await _mediator.Send(new CreateEmployeeCommand()
-        //        //{
-        //        //    LastName = request.LastName,
-        //        //    FirstName = request.FirstName,
-        //        //    MiddleName = request.MiddleName,
-        //        //    CivilStatusCode = request.CivilStatusCode,
-        //        //    DepartmentCode = request.DepartmentCode,
-        //        //    DepartmentSectionCode = request.DepartmentSectionCode,
-        //        //    DateOfBirth = request.DateOfBirth
-        //        //});
-        //        //return data;
-
-        //        return false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-        //    }
-        //}
-
-        //public async Task<Tuple<bool,string>> UpdateEmployee(UpdateEmployeeDto request)
-        //{
-        //    try
-        //    {
-        //        //var data = await _mediator.Send(new UpdateEmployeeCommand()
-        //        //{
-        //        //    EmpID = request.EmpID,
-        //        //    LastName = request.LastName,
-        //        //    FirstName = request.FirstName,
-        //        //    MiddleName = request.MiddleName,
-        //        //    DepartmentCode = request.DepartmentCode,
-        //        //    DepartmentSectionCode = request.DepartmentSectionCode,
-        //        //    DateOfBirth = request.DateOfBirth,
-        //        //    CivilStatusCode = request.CivilStatusCode
-        //        //});
-
-        //        //return data;
-
-        //        return Tuple.Create(false, "");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-        //    }
-        //}
-
-
-        //public async Task<Tuple<bool,string>> ArchiveEmployee(string empid)
-        //{
-        //    try
-        //    {
-        //        //var _results = await _mediator.Send(new DeleteEmployeeCommand { EmpID = empid });
-        //        //return _results;
-
-        //        return Tuple.Create(false, "");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-        //    }
-        //}
+                return _result;
+            }
+            catch (ApplicationException ex)
+            {
+                throw new ApplicationException(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
 
 
     }

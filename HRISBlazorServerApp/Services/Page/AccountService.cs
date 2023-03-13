@@ -19,6 +19,7 @@ namespace HRISBlazorServerApp.Services.Page
         private readonly ILocalStorageService _localStorage;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly string _baseUrl;
 
 
         public AccountService(HttpClient httpClient,
@@ -34,16 +35,12 @@ namespace HRISBlazorServerApp.Services.Page
             _config = configuration;
             httpContextAccessor = HttpContextAccessor;
             tokenProvider = _tokenProvider;
+            _baseUrl = _config.GetValue<string>("HRISBaseUrl");
         }
 
         public async Task<LoginResult> Login(LoginRequest loginRequest)
         {
-            UriBuilder url = new UriBuilder(_config.GetValue<string>("HRISBaseUrl"))
-            {
-                Path = "api/authentication/login",
-            };
-
-            var response = await _httpClient.PostAsJsonAsync(url.ToString(), loginRequest);
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}api/authentication/login", loginRequest);
 
             LoginResult loginResult = new LoginResult();
 
@@ -83,9 +80,9 @@ namespace HRISBlazorServerApp.Services.Page
             HttpResponseMessage response = await _httpClient.GetAsync(usrUrl.ToString()).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
-                var products = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var user = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(products);
+                var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(user);
 
                 if (!result.ContainsKey("email"))
                     throw new ApplicationException("No User Found");
