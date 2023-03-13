@@ -1,3 +1,4 @@
+using CorrelationId;
 using HRIS.Application;
 using HRIS.Application.Common.Interfaces.Services;
 using HRIS.Infrastructure;
@@ -38,6 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//app.UseCorrelationId();
 
 app.UseAuthentication();
 app.UseAuthorization();

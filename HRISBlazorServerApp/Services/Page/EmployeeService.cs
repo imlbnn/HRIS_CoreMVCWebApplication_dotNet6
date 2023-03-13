@@ -12,21 +12,23 @@ namespace HRISBlazorServerApp.Services.Page
         private readonly string baseUrl;
         private readonly IConfiguration _config;
 
-        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration configuration) 
+        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration configuration)
             : base(tokenProvider, httpClient)
         {
-            _config= configuration;
-            baseUrl = _config.GetValue<string>("HRISBaseUrl");
+            _config = configuration;
+            //baseUrl = _config.GetValue<string>("HRISBaseUrl");
         }
 
         public async Task<IEnumerable<GetEmployeesDto>> GetEmployees()
         {
             try
             {
-                UriBuilder _url = new UriBuilder(baseUrl)
-                {
-                    Path = "api/employee"
-                };
+                //UriBuilder _url = new UriBuilder(baseUrl)
+                //{
+                //    Path = "api/employee"
+                //};
+
+                var _url = "api/employee";
 
                 var _result = await base.GetAsync<IEnumerable<GetEmployeesDto>>(_url.ToString(), true);
 
@@ -42,10 +44,12 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                UriBuilder _url = new UriBuilder(baseUrl)
-                {
-                    Path = $"api/employee/{empid}"
-                };
+                //UriBuilder _url = new UriBuilder(baseUrl)
+                //{
+                //    Path = $"api/employee/{empid}"
+                //};
+
+                var _url = $"api/employee/{empid}";
 
                 var _result = await base.GetAsync<GetEmployeesDto>(_url.ToString(), true);
 
@@ -61,10 +65,13 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                UriBuilder _url = new UriBuilder(baseUrl)
-                {
-                    Path = $"api/employee/create"
-                };
+                //UriBuilder _url = new UriBuilder(baseUrl)
+                //{
+                //    Path = $"api/employee/create"
+                //};
+
+                var _url = $"api/employee/create";
+
 
                 var _result = await base.PostAsync<CreateEmployeeDto, bool>(_url.ToString(), request);
 
@@ -84,10 +91,12 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                UriBuilder _url = new UriBuilder(baseUrl)
-                {
-                    Path = $"api/employee/update"
-                };
+                //UriBuilder _url = new UriBuilder(baseUrl)
+                //{
+                //    Path = $"api/employee/update"
+                //};
+
+                var _url = $"api/employee/update";
 
                 var _result = await base.PutAsync<UpdateEmployeeDto, Tuple<bool, string>>(_url.ToString(), request);
 
@@ -108,11 +117,14 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                UriBuilder _url = new UriBuilder(baseUrl)
-                {
-                    Path = $"api/employee/archive/{empid}"
-                };
+                //UriBuilder _url = new UriBuilder(baseUrl)
+                //{
+                //    Path = $"api/employee/archive/{empid}"
+                //};
 
+
+                var _url =  $"api/employee/archive/{empid}";
+                
                 var _result = await base.PutAsync(_url.ToString(), true);
 
                 return _result;

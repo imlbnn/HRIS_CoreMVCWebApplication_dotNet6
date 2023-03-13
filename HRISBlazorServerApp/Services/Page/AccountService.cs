@@ -68,7 +68,7 @@ namespace HRISBlazorServerApp.Services.Page
 
         private async Task<Dictionary<string, string>> GetUserDetails(string username)
         {
-            UriBuilder usrUrl = new UriBuilder(_config.GetValue<string>("HRISBaseUrl"))
+            UriBuilder usrUrl = new UriBuilder(_baseUrl)
             {
                 Path = "api/authentication/GetUserByUsername",
                 Query = "username=" + username

@@ -1,8 +1,60 @@
 ﻿@page "/employee"
+
 @attribute [Authorize]
 @inherits EmployeeBase
 <PageTitle>Employees</PageTitle>
 
+
+<style>
+    .custom-table-col-header {
+        font-size: 12px;
+        width: auto
+    }
+
+    .custom-table-col-row {
+        font-size: 10px;
+        width: auto
+    }
+
+</style>
+
 <h3>Employee</h3>
+
+<RadzenDataGrid @ref="grid"
+                Data="@getEmployees"
+                AllowColumnResize="false" LoadData="@LoadData"
+                IsLoading=@isLoading Count="@count"
+                AllowSorting="true" AllowFiltering="false" AllowPaging="true"
+                PageSize="15" PagerHorizontalAlign="HorizontalAlign.Center"
+                TItem="GetEmployeesDto" class="table table-bordered">
+
+    <Columns>
+
+        <RadzenDataGridColumn TItem="GetEmployeesDto" Property="DateOfBirth"
+                              Title="Date Of Birth" Sortable="true"
+                              HeaderCssClass="custom-table-col-header" CssClass="custom-table-col-row">
+            <Template Context="context">
+                @context.DateOfBirth.ToString("MM/dd/yyyy")
+            </Template>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="GetEmployeesDto" Property="LastName"
+                              Filterable="false" Title="LastName" Sortable="true"
+                              HeaderCssClass="custom-table-col-header"
+                              CssClass="custom-table-col-row">
+            <Template Context="context">
+                @context.LastName.ToUpper()
+            </Template>
+        </RadzenDataGridColumn>
+
+    </Columns>
+
+
+
+
+
+</RadzenDataGrid>
+
+
 
 
