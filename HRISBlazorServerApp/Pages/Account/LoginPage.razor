@@ -1,68 +1,124 @@
 ﻿@page "/"
 @layout LoginLayout
-@using HRISBlazorServerApp.Interfaces.Services
-@using Blazored.LocalStorage
-@using HRISBlazorServerApp.Models;
-@inject IAccountService AuthService
-@inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
-@inject ILocalStorageService _localStorage
+@inherits LoginBase
 
 <title>Login</title>
 
-@if (ShowErrors)
-{
-    <div class="alert alert-danger" role="alert">
-        <p>@Error</p>
-    </div>
-}
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-<br />
-<br />
+    .alert {
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #ffb84d;
+        color: white;
+        margin: 10px;
+        text-align: center;
+    }
 
-<div class="card" style="margin-left:30%; margin-right:30%">
-    <div class="card-body">
-        <h5 class="card-title" style="text-align:center">Login Form</h5>
-        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
 
-            <div class="form-group">
-                <label for="username">Username</label>
-                <InputText Id="username" Class="form-control" @bind-Value="loginModel.Username" />
-                <ValidationMessage For="@(() => loginModel.Username)" />
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
-                <ValidationMessage For="@(() => loginModel.Password)" />
-            </div>
-            <button type="submit" class="btn btn-primary" style="float:right">SIGN IN</button>
-        </EditForm>
-    </div>
-</div>
+    form {
+        border: 0px solid #f1f1f1;
+        width: 500px;
+        margin: 0 auto;
+        vertical-align: middle;
+        margin-top: 7%;
+    }
 
-@code {
+    input[type=text], input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
 
-    private LoginRequest loginModel = new LoginRequest();
-    private bool ShowErrors;
-    private string Error = "";
+    button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
 
-    private async Task HandleLogin()
-    {
-        ShowErrors = false;
-
-        var result = await AuthService.Login(loginModel);
-
-        if (result.Success)
-        {
-            NavigationManager.NavigateTo("/employee");
+        button:hover {
+            opacity: 0.8;
         }
-        else
-        {
-            Error = "Invalid Login";
-            ShowErrors = true;
+
+    .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+    }
+
+    .imgcontainer {
+        text-align: center;
+        margin: 24px 0 12px 0;
+    }
+
+    img.avatar {
+        width: 40%;
+        border-radius: 50%;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    span.psw {
+        float: right;
+        padding-top: 16px;
+    }
+
+    /* Change styles for span and cancel button on extra small screens */
+    @@media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+
+        .cancelbtn {
+            width: 100%;
         }
     }
-}
+</style>
+
+
+
+<div class="container">
+    <RadzenNotification />
+    <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+        <div style ="text-align:center">
+            <h3>Welcome to HR Information System</h3>
+        </div>
+        
+
+        @if (ShowErrors)
+        {
+            <div class="alert">
+                @Error
+            </div>
+        }
+
+        <div class="form-group">
+            <label class="col-form-label" for="username">Username</label>
+            <input type="text" class="form-control form-control-sm" @bind="loginModel.Username" />
+            <ValidationMessage For="@(() => loginModel.Username)" />
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-form-label" for="password">Password</label>
+            <input type="password" class="form-control form-control-sm" @bind="loginModel.Password" />
+            <ValidationMessage For="@(() => loginModel.Password)" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="float:right">SIGN IN</button>
+    </EditForm>
+
+</div>
 

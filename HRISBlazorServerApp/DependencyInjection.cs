@@ -1,13 +1,14 @@
-﻿using Blazored.LocalStorage;
-using HRIS.Application.Common.Interfaces.Services;
-using HRIS.Infrastructure;
+﻿using AutoMapper;
+using Blazored.LocalStorage;
 using HRISBlazorServerApp.Interfaces.Services;
+using HRISBlazorServerApp.Mappings;
 using HRISBlazorServerApp.Models;
 using HRISBlazorServerApp.Providers;
 using HRISBlazorServerApp.Services;
 using HRISBlazorServerApp.Services.Page;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Radzen;
 
 namespace HRISBlazorServerApp
@@ -16,7 +17,18 @@ namespace HRISBlazorServerApp
     {
         public static IServiceCollection AddUIDependency(this IServiceCollection services, IConfiguration Configuration)
         {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new ApplicationMappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddScoped<HttpClient>();
+
             services.AddBlazorAuthentication(Configuration);
+            services.AddRadzenDependency();
 
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             services.AddBlazoredLocalStorage();
@@ -24,10 +36,32 @@ namespace HRISBlazorServerApp
 
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }
+
+        public static IServiceCollection AddBlazorAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.LoginPath = "/";
+                    //option.AccessDeniedPath = "/account/accessdenied";
+                    option.ReturnUrlParameter = "/";
+                    option.ExpireTimeSpan = TimeSpan.FromDays(1);
+                });
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+            });
+
+           
+
+            return services;
+        }
+
+
 
         public static IServiceCollection AddRadzenDependency(this IServiceCollection services)
         {

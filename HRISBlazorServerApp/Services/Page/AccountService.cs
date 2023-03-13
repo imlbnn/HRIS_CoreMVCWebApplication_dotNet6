@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Blazored.LocalStorage;
-using HRIS.Infrastructure.Identity;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Models;
 using HRISBlazorServerApp.Providers;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace HRISBlazorServerApp.Services.Page
 {
@@ -21,12 +21,10 @@ namespace HRISBlazorServerApp.Services.Page
         private readonly IHttpContextAccessor httpContextAccessor;
 
 
-        public AccountService(UserManager<ApplicationUser> userManager,
-                               RoleManager<IdentityRole> roleManager,
-                              HttpClient httpClient,
+        public AccountService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
-                           ILocalStorageService localStorage
-                           , IConfiguration configuration,
+                           ILocalStorageService localStorage, 
+                           IConfiguration configuration,
                            IHttpContextAccessor HttpContextAccessor,
                            TokenProvider _tokenProvider)
         {
@@ -42,11 +40,10 @@ namespace HRISBlazorServerApp.Services.Page
         {
             UriBuilder url = new UriBuilder(_config.GetValue<string>("HRISBaseUrl"))
             {
-                Path = "api/Authorization/Login",
-                Query = "username=" + loginRequest.Username + "&password=" + loginRequest.Password
+                Path = "api/authentication/login",
             };
 
-            var response = await _httpClient.PostAsJsonAsync<LoginResult>(url.ToString(), null);
+            var response = await _httpClient.PostAsJsonAsync(url.ToString(), loginRequest);
 
             LoginResult loginResult = new LoginResult();
 
@@ -60,8 +57,6 @@ namespace HRISBlazorServerApp.Services.Page
 
                 if (user.ContainsKey("email"))
                 {
-                    //await _localStorage.SetItemAsync("authToken", tokenProvider.AccessToken);//loginResult.Token);
-
                     ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(user["email"].ToString());
 
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
@@ -74,11 +69,11 @@ namespace HRISBlazorServerApp.Services.Page
         }
 
 
-        private  async Task<Dictionary<string, string>> GetUserDetails(string username)
+        private async Task<Dictionary<string, string>> GetUserDetails(string username)
         {
             UriBuilder usrUrl = new UriBuilder(_config.GetValue<string>("HRISBaseUrl"))
             {
-                Path = "api/Authorization/GetUserByUsername",
+                Path = "api/authentication/GetUserByUsername",
                 Query = "username=" + username
             };
 
@@ -108,7 +103,6 @@ namespace HRISBlazorServerApp.Services.Page
         public async Task Logout()
         {
             await _localStorage.ClearAsync();
-            //await _localStorage.RemoveItemAsync("authToken");
             tokenProvider.AccessToken = string.Empty;
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;

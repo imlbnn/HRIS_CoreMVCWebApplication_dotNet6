@@ -16,8 +16,6 @@ namespace HRISBlazorServerApp.Providers
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly TokenProvider tokenProvider;
 
-
-
         public ApiAuthenticationStateProvider(HttpClient httpClient
             , ILocalStorageService localStorage, IJSRuntime jSRuntime
             , TokenProvider _tokenProvider

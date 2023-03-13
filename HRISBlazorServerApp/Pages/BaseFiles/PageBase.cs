@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using HRIS.Application.Common.Interfaces.Application;
-using HRIS.Application.Common.Interfaces.Services;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Services.Page;
 using Microsoft.AspNetCore.Components;
@@ -26,29 +24,23 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         public IAccountService accountService { get; set; }
 
         [Inject]
-        public DialogService DialogService { get; set; }
+        public DialogService dialogService { get; set; }
 
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         [Inject]
         public NavigationManager UriHelper { get; set; }
-        [Inject]
-        public IDateTime _dateTime { get; set; }
-
-        //[Inject]
-        //public ISessionStorageService _sessionStorageService { get; set; }
-
+       
         [Inject]
         public ContextMenuService _contextMenuService { get; set; }
-
         [Inject]
-        public ICurrentUserService _currentUserService { get; set; }
+        public NotificationService notificationService { get; set; }
 
 
         public async Task BusyDialog(string message)
         {
-            await DialogService.OpenAsync("", ds =>
+            await dialogService.OpenAsync("", ds =>
             {
                 RenderFragment content = b =>
                 {
@@ -72,6 +64,22 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
             byte[] b64String = Convert.FromBase64String(data);
             string decodedString = Encoding.UTF8.GetString(b64String);
             return decodedString;
+        }
+
+
+        public void ShowNotification(NotificationSeverity severity, string detail, string summary, double duration = 3000, string style = "")
+        {
+            var message = new NotificationMessage
+            {
+                Severity = severity,
+                Style = style,
+                Detail = detail,
+                Duration = duration,
+                Summary = summary
+            };
+
+
+            notificationService.Notify(message);
         }
     }
 }
