@@ -153,7 +153,7 @@ namespace HRISBlazorServerApp
             
             services.AddScoped<TokenProvider>();
 
-            services.AddScoped<TokenConfig>(); 
+            services.AddSingleton<TokenConfig>(); 
 
             return services;
         }

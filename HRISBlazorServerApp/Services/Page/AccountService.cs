@@ -45,7 +45,7 @@ namespace HRISBlazorServerApp.Services.Page
 
             var _result = await base.PostAsync<LoginRequest, LoginResult>(_url.ToString(), loginRequest);
 
-            tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken = _result.Token;
+            tokenProvider.AccessToken = _result.Token;
 
             var user = await GetUserDetails(loginRequest.Username);
 

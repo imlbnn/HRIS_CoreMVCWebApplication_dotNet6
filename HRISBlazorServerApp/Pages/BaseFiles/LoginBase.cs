@@ -10,6 +10,10 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         public bool ShowErrors;
         public string Error = "";
 
+        [Inject]
+        private TokenConfig Config { get; set; }
+
+
         public async Task HandleLogin()
         {
             try
@@ -20,6 +24,7 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
                 if (result.Success)
                 {
+                    Config.SetToken(result.Token);
                     UriHelper.NavigateTo("/main");
                 }
                 else

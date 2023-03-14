@@ -13,25 +13,21 @@ namespace HRISBlazorServerApp.Providers
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
-        private readonly IJSRuntime JSRuntime;
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly TokenProvider tokenProvider;
         private readonly ITokenProviderService _tokenProviderService;
-        private TokenConfig _tokenConfig;
+        private readonly TokenConfig _tokenConfig;
 
-        public ApiAuthenticationStateProvider(HttpClient httpClient
-            , ILocalStorageService localStorage, IJSRuntime jSRuntime
-            , TokenProvider _tokenProvider
-            , IHttpContextAccessor HttpContextAccessor,
+        public ApiAuthenticationStateProvider(HttpClient httpClient, 
+            ILocalStorageService localStorage, 
+            IJSRuntime jSRuntime, 
+            TokenProvider _tokenProvider, 
             ITokenProviderService tokenProviderService,
             TokenConfig tokenConfig
             )
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
-            JSRuntime = jSRuntime;
             tokenProvider = _tokenProvider;
-            httpContextAccessor = HttpContextAccessor;
             _tokenProviderService = tokenProviderService;
             _tokenConfig = tokenConfig;
         }
@@ -44,9 +40,12 @@ namespace HRISBlazorServerApp.Providers
                 var res = await _tokenProviderService.IsValidToken(_tokenConfig.CurrentAccessToken);
 
                 if (res)
-                    tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken;
+                {
+                    savedToken = _tokenConfig.CurrentAccessToken;
+                    tokenProvider.AccessToken = savedToken;
+                }
                 else
-                    _tokenConfig.CurrentAccessToken = string.Empty;
+                    _tokenConfig.SetToken(string.Empty);
             }
 
             if (!string.IsNullOrEmpty(savedToken))

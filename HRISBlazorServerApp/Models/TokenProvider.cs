@@ -9,12 +9,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core.Tokenizer;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HRISBlazorServerApp.Models
 {
     public class TokenConfig
     {
-        public string CurrentAccessToken { get; set; }
+        public string CurrentAccessToken { get; private set; }
+
+        public event Func<Task> Notify;
+
+        public void SetToken(string name)
+        {
+            CurrentAccessToken = name;
+            Notify?.Invoke();
+        }
     }
 
     public class TokenProvider : PageModel
