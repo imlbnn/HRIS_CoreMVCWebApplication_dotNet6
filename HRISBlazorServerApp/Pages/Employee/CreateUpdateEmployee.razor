@@ -5,89 +5,155 @@
 
 @if (string.IsNullOrEmpty(empid))
 {
-    <PageTitle>Create a new employee</PageTitle>
-    <h3>Employee Details</h3>
+    <PageTitle>Create Employee</PageTitle>
+
+    <h3>Create Employee</h3>
 
     <EditForm Model="createEmployee" OnSubmit="HandleSubmit">
-        <div>
-            <label class="col-form-label" for="firstname">First Name</label>
-            <InputText id="firstname" @bind-Value="createEmployee.FirstName" class="form-control"></InputText>
-        </div>
-        <div>
-            <label class="col-form-label" for="middlename">Middle Name</label>
-            <InputText id="middlename" @bind-Value="createEmployee.MiddleName" class="form-control"></InputText>
-        </div>
-        <div>
-            <label class="col-form-label" for="lastname">Last Name</label>
-            <InputText id="lastname" @bind-Value="createEmployee.LastName" class="form-control"></InputText>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="col-form-label" for="firstname">First Name</label>
+                <InputText id="firstname" @bind-Value="createEmployee.FirstName" class="form-control"></InputText>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label" for="middlename">Middle Name</label>
+                <InputText id="middlename" @bind-Value="createEmployee.MiddleName" class="form-control"></InputText>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label" for="lastname">Last Name</label>
+                <InputText id="lastname" @bind-Value="createEmployee.LastName" class="form-control"></InputText>
+            </div>
         </div>
 
-        <div>
-            <label class="col-form-label">Department</label><br />
-            <InputSelect @bind-Value="createEmployee.DepartmentCode" class="form-select">
-                @foreach (var dept in departmentList)
-                {
-                    <option value="@dept.Code">@dept.Description</option>
-                }
-            </InputSelect>
-        </div>
-        <div>
-            <label class="col-form-label">Section</label><br />
-            <InputSelect @bind-Value="createEmployee.DepartmentSectionCode" class="form-select">
-                @if (departmentSectionList.Count > 0)
-                {
-                    foreach (var sect in departmentSectionList)
+        <div class="row">
+
+            <div class="col-md-4">
+                <label class="col-form-label">Department</label><br />
+
+                <InputSelect class="form-control form-select" Value="@deptCode"
+                         ValueChanged="@(async(string value) => await OnValueChanged(value))"
+                         ValueExpression="@(() => createEmployee.DepartmentCode)">
+                    <option selected>Select</option>
+                    @foreach (var dept in departmentList)
                     {
-                        <option value="@sect.Code">@sect.Description</option>
+                        <option value="@dept.Code">@dept.Description</option>
                     }
-                }
-            </InputSelect>
+                </InputSelect>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label">Section</label><br />
+                <InputSelect @bind-Value="createEmployee.DepartmentSectionCode" class="form-select">
+                    @if (departmentSectionList.Count > 0)
+                    {
+                        <option selected>Select</option>
+                        foreach (var sect in departmentSectionList)
+                        {
+                            <option value="@sect.Code">@sect.Description</option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="col-md-4">
+                <label class="col-form-label">Civil Status</label><br />
+                <InputSelect @bind-Value="createEmployee.CivilStatusCode" class="form-select">
+                    <option selected>Select</option>
+                    @foreach (var civilstat in civilStatusList)
+                    {
+                        <option value="@civilstat.Code">@civilstat.Description</option>
+                    }
+                </InputSelect>
+            </div>
+
         </div>
 
-        <div>
-            <label class="col-form-label">Civil Status</label><br />
-            <InputSelect @bind-Value="createEmployee.CivilStatusCode" class="form-select">
-                @foreach (var civilstat in civilStatusList)
-                {
-                    <option value="@civilstat.Code">@civilstat.Description</option>
-                }
-            </InputSelect>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="col-form-label" for="dateOfbirth">Date Of Birth</label>
+                <InputDate id="dateOfbirth" @bind-Value="createEmployee.DateOfBirth" class="form-control"></InputDate>
+            </div>
         </div>
+
         <br />
         <button type="submit" class="btn btn-primary">@btnText</button>
-        <button type="button" class="btn btn-primary">Cancel</button>
+        <button type="button" class="btn btn-primary" @onclick="@(async() => await ReturnToEmployeeMain())">Cancel</button>
     </EditForm>
 }
 else
 {
-    @* <PageTitle>Edit @updateEmployee.EmpID;</PageTitle>
-    <h3>Edit @updateEmployee.EmpID</h3>
+    <PageTitle>Edit Employee</PageTitle>
 
+    <h3>Edit Employee</h3>
 
-    <EditForm Model="" OnSubmit="HandleSubmit">
-    <div>
-        <label for="firstname">First Name</label>
-        <InputText id="firstname" @bind-Value="hero.FirstName" class="form-control"></InputText>
-    </div>
-    <div>
-        <label for="lastname">Last Name</label>
-        <InputText id="lastname" @bind-Value="hero.LastName" class="form-control"></InputText>
-    </div>
-    <div>
-        <label for="heroname">Hero Name</label>
-        <InputText id="heroname" @bind-Value="hero.HeroName" class="form-control"></InputText>
-    </div>
-    <div>
-        <label>Comic</label><br />
-        <InputSelect @bind-Value="hero.ComicId" class="form-select">
-            @foreach (var comic in SuperHeroService.Comics)
-            {
-                    <option value="@comic.Id">@comic.Name</option>
-            }
-        </InputSelect>
-    </div>
-    <br />
-    <button type="submit" class="btn btn-primary">@btnText</button>
-    <button type="button" class="btn btn-danger" @onclick="DeleteHero">Delete Hero</button>
-</EditForm>*@
+    <EditForm Model="updateEmployee" OnSubmit="HandleSubmit">
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="col-form-label" for="firstname">First Name</label>
+                <InputText id="firstname" @bind-Value="updateEmployee.FirstName" class="form-control"></InputText>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label" for="middlename">Middle Name</label>
+                <InputText id="middlename" @bind-Value="updateEmployee.MiddleName" class="form-control"></InputText>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label" for="lastname">Last Name</label>
+                <InputText id="lastname" @bind-Value="updateEmployee.LastName" class="form-control"></InputText>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <label class="col-form-label">Department</label><br />
+
+                <InputSelect class="form-control form-select" Value="@deptCode"
+                         ValueChanged="@(async(string value) => await OnValueChanged(value))"
+                         ValueExpression="@(() => updateEmployee.DepartmentCode)">
+                    <option selected>Select</option>
+                    @foreach (var dept in departmentList)
+                    {
+                        <option value="@dept.Code">@dept.Description</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label">Section</label><br />
+                <InputSelect @bind-Value="updateEmployee.DepartmentSectionCode" class="form-select">
+                    @if (departmentSectionList.Count > 0)
+                    {
+                        <option selected>Select</option>
+                        foreach (var sect in departmentSectionList)
+                        {
+                            <option value="@sect.Code">@sect.Description</option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="col-md-4">
+                <label class="col-form-label">Civil Status</label><br />
+                <InputSelect @bind-Value="updateEmployee.CivilStatusCode" class="form-select">
+                    <option selected>Select</option>
+                    @foreach (var civilstat in civilStatusList)
+                    {
+                        <option value="@civilstat.Code">@civilstat.Description</option>
+                    }
+                </InputSelect>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="col-form-label" for="dateOfbirth">Date Of Birth</label>
+                <InputDate id="dateOfbirth" @bind-Value="updateEmployee.DateOfBirth" class="form-control"></InputDate>
+            </div>
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-primary">@btnText</button>
+        <button type="button" class="btn btn-primary">Cancel</button>
+    </EditForm>
 }

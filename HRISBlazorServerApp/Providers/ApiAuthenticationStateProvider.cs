@@ -41,8 +41,7 @@ namespace HRISBlazorServerApp.Providers
 
                 if (res)
                 {
-                    savedToken = _tokenConfig.CurrentAccessToken;
-                    tokenProvider.AccessToken = savedToken;
+                    savedToken = tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken;
                 }
                 else
                     _tokenConfig.SetToken(string.Empty);

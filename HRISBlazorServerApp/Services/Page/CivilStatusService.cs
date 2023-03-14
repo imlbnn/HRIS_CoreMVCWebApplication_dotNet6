@@ -14,7 +14,7 @@ namespace HRISBlazorServerApp.Services.Page
         {
             try
             {
-                var _url = $"api/civistatus";
+                var _url = $"api/civilstatus";
 
                 var _result = await base.GetAsync<IEnumerable<GetCivilStatusDto>>(_url.ToString(), true);
 

@@ -84,7 +84,7 @@ namespace HRISBlazorServerApp.Services.Page
             {
                 throw;
             }
-            catch (ValidationException)
+            catch (ValidationException ex)
             {
                 throw;
             }

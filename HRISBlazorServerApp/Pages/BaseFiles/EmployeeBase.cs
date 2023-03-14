@@ -60,5 +60,16 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         {
             UriHelper.NavigateTo("/employee/create");
         }
+
+        public void EditEmployee(string empid)
+        {
+            UriHelper.NavigateTo($"employee/edit/{empid}");
+        }
+
+        public void ViewEmployee(string empid)
+        {
+            UriHelper.NavigateTo($"employee/{empid}");
+        }
+
     }
 }

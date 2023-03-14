@@ -27,7 +27,7 @@ namespace HRIS.Application.DepartmentalSections.Handlers.Queries
             try
             {
                 var _result = (await _departmentalSectionRepository.GetAllAsync())
-                                .Where(x=> x.Code == request.departmentCode);
+                                .Where(x=> x.DepartmentCode == request.departmentCode);
 
                 var _output = _Mapper.Map<IEnumerable<GetDepartmentSectionDto>>(_result);
 

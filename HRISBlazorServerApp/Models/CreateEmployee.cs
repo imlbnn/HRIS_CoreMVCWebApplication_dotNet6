@@ -18,11 +18,17 @@ namespace HRISBlazorServerApp.Models
 
         public string DepartmentCode { get; set; }
 
+        public string DepartmentName { get; set; }
+
         public string DepartmentSectionCode { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public string DepartmentSectionName { get; set; }
+
+        public DateTime DateOfBirth { get; set; } = DateTime.Now;
 
         public string CivilStatusCode { get; set; }
+
+        public string CivilStatusName { get; set; }
 
 
     }
