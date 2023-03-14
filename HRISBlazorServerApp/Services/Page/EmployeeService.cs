@@ -8,8 +8,8 @@ namespace HRISBlazorServerApp.Services.Page
 {
     public class EmployeeService : ApiServiceBase, IEmployeeService
     {
-        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient)
-            : base(tokenProvider, httpClient)
+        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration config)
+            : base(tokenProvider, httpClient, config)
         {
         }
 
@@ -69,14 +69,14 @@ namespace HRISBlazorServerApp.Services.Page
             }
         }
 
-        public async Task<bool> CreateEmployee(CreateEmployeeDto request)
+        public async Task<bool> CreateEmployee(CreateEmployee request)
         {
             try
             {
                 var _url = $"api/employee/create";
 
 
-                var _result = await base.PostAsync<CreateEmployeeDto, bool>(_url.ToString(), request);
+                var _result = await base.PostAsync<CreateEmployee, bool>(_url.ToString(), request);
 
                 return _result;
             }
@@ -98,13 +98,13 @@ namespace HRISBlazorServerApp.Services.Page
             }
         }
 
-        public async Task<Tuple<bool, string>> UpdateEmployee(UpdateEmployeeDto request)
+        public async Task<Tuple<bool, string>> UpdateEmployee(UpdateEmployee request)
         {
             try
             {
                 var _url = $"api/employee/update";
 
-                var _result = await base.PutAsync<UpdateEmployeeDto, Tuple<bool, string>>(_url.ToString(), request);
+                var _result = await base.PutAsync<UpdateEmployee, Tuple<bool, string>>(_url.ToString(), request);
 
                 return _result;
             }

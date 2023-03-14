@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
+using HRISBlazorServerApp.Interfaces;
 
 namespace HRISBlazorServerApp.Providers
 {
@@ -15,11 +16,15 @@ namespace HRISBlazorServerApp.Providers
         private readonly IJSRuntime JSRuntime;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly TokenProvider tokenProvider;
+        private readonly ITokenProviderService _tokenProviderService;
+        private TokenConfig _tokenConfig;
 
         public ApiAuthenticationStateProvider(HttpClient httpClient
             , ILocalStorageService localStorage, IJSRuntime jSRuntime
             , TokenProvider _tokenProvider
-            , IHttpContextAccessor HttpContextAccessor
+            , IHttpContextAccessor HttpContextAccessor,
+            ITokenProviderService tokenProviderService,
+            TokenConfig tokenConfig
             )
         {
             _httpClient = httpClient;
@@ -27,10 +32,22 @@ namespace HRISBlazorServerApp.Providers
             JSRuntime = jSRuntime;
             tokenProvider = _tokenProvider;
             httpContextAccessor = HttpContextAccessor;
+            _tokenProviderService = tokenProviderService;
+            _tokenConfig = tokenConfig;
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var savedToken = await Task.FromResult(tokenProvider.AccessToken);
+
+            if (string.IsNullOrEmpty(savedToken))
+            {
+                var res = await _tokenProviderService.IsValidToken(_tokenConfig.CurrentAccessToken);
+
+                if (res)
+                    tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken;
+                else
+                    _tokenConfig.CurrentAccessToken = string.Empty;
+            }
 
             if (!string.IsNullOrEmpty(savedToken))
             {

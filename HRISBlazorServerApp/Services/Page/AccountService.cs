@@ -18,17 +18,21 @@ namespace HRISBlazorServerApp.Services.Page
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
+        private TokenConfig _tokenConfig;
 
         public AccountService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
                            ILocalStorageService localStorage,
-                           TokenProvider _tokenProvider) 
-            : base(_tokenProvider, httpClient)
+                           TokenProvider _tokenProvider,
+                           IConfiguration config,
+                           TokenConfig tokenConfig) 
+            : base(_tokenProvider, httpClient, config)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
             tokenProvider = _tokenProvider;
+            _tokenConfig= tokenConfig;
         }
 
         public async Task<LoginResult> Login(LoginRequest loginRequest)
@@ -41,7 +45,7 @@ namespace HRISBlazorServerApp.Services.Page
 
             var _result = await base.PostAsync<LoginRequest, LoginResult>(_url.ToString(), loginRequest);
 
-            tokenProvider.AccessToken = _result.Token;
+            tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken = _result.Token;
 
             var user = await GetUserDetails(loginRequest.Username);
 
@@ -65,10 +69,12 @@ namespace HRISBlazorServerApp.Services.Page
             return user;
         }
 
+        
+
         public async Task Logout()
         {
             await _localStorage.ClearAsync();
-            tokenProvider.AccessToken = string.Empty;
+            tokenProvider.AccessToken= tokenProvider.CurrentAccessToken = string.Empty;
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }

@@ -1,6 +1,7 @@
 ﻿using Radzen;
 using Radzen.Blazor;
 using HRISBlazorServerApp.Dtos.Employee;
+using Microsoft.AspNetCore.Components;
 
 namespace HRISBlazorServerApp.Pages.BaseFiles
 {
@@ -9,7 +10,7 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
     {
         public int count;
 
-        public IEnumerable<GetEmployeesDto> getEmployees { get; set; }
+        public List<GetEmployeesDto> getEmployees = new List<GetEmployeesDto>();
 
 
         public Task IsLoaded;
@@ -50,7 +51,14 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
         protected override async Task OnInitializedAsync()
         {
-            await base.OnInitializedAsync();
+            getEmployees = (await employeeService.GetEmployees().ConfigureAwait(false)).ToList();
+
+            //await base.OnInitializedAsync();
+        }
+
+        public void CreateNewEmployee()
+        {
+            UriHelper.NavigateTo("/employee/create");
         }
     }
 }

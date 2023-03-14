@@ -14,8 +14,4 @@
     <PackageReference Include="Radzen.Blazor" Version="4.7.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\CivilStatus\" />
-  </ItemGroup>
-
 </Project>

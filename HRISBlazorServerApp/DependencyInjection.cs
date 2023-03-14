@@ -2,6 +2,7 @@
 using Blazored.LocalStorage;
 using HRISBlazorServerApp.APISettings;
 using HRISBlazorServerApp.Handlers;
+using HRISBlazorServerApp.Interfaces;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Mappings;
 using HRISBlazorServerApp.Models;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Radzen;
 using System.Configuration;
 using System.Net.Http.Headers;
@@ -28,21 +30,33 @@ namespace HRISBlazorServerApp
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
+            
             services.AddSingleton(mapper);
-
-            services.AddScoped<HttpClient>();
-
+            
             services.AddBlazorAuthentication(Configuration);
+            
+            services.AddHttpClientConfigForAPIService(Configuration);
+            
             services.AddRadzenDependency();
 
-            services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
-            services.AddBlazoredLocalStorage();
-            services.AddScoped<TokenProvider>();
+            services.AddScoped<ITokenProviderService, TokenProviderService>();
 
+
+            //API Services
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IDepartmentSectionService, DepartmentSectionService>();
+            services.AddScoped<ICivilStatusService, CivilStatusService>();
 
-            var _serviceAPIOpts = Configuration.GetSection(nameof(ServiceAPIOptions)).Get<ServiceAPIOptions>();
+            return services;
+        }
+
+        public static IServiceCollection AddHttpClientConfigForAPIService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<HttpClient>();
+
+            var _serviceAPIOpts = configuration.GetSection(nameof(ServiceAPIOptions)).Get<ServiceAPIOptions>();
 
             services.AddTransient<NoOpDelegatingHandler>();
 
@@ -51,16 +65,62 @@ namespace HRISBlazorServerApp
                         await ApplyHttpClientOptions(sp, c, _serviceAPIOpts.ApiBaseUrl,
                                     _serviceAPIOpts.RequestTimeout))
                 .ConfigurePrimaryHttpMessageHandler(() =>
-                 {
-                     var handler = GetPrimaryHttpMsgHandler(_serviceAPIOpts);
-                     handler.ServerCertificateCustomValidationCallback = 
-                            (message, cert, chain, errors) => { return true; };
-                     return handler;
-                 })
+                {
+                    var handler = GetPrimaryHttpMsgHandler(_serviceAPIOpts);
+                    handler.ServerCertificateCustomValidationCallback =
+                           (message, cert, chain, errors) => { return true; };
+                    return handler;
+                })
                 //.AddCorrelationIdForwarding() // add the handler to attach the correlation ID to outgoing requests for this named client
                 .AddHttpMessageHandler<NoOpDelegatingHandler>();
 
+
             services.AddHttpClient<IAccountService, AccountService>
+                (async (sp, c) =>
+                        await ApplyHttpClientOptions(sp, c, _serviceAPIOpts.ApiBaseUrl,
+                                    _serviceAPIOpts.RequestTimeout))
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    var handler = GetPrimaryHttpMsgHandler(_serviceAPIOpts);
+                    handler.ServerCertificateCustomValidationCallback =
+                           (message, cert, chain, errors) => { return true; };
+                    return handler;
+                })
+                //.AddCorrelationIdForwarding() // add the handler to attach the correlation ID to outgoing requests for this named client
+                .AddHttpMessageHandler<NoOpDelegatingHandler>();
+
+
+            services.AddHttpClient<IDepartmentService, DepartmentService>
+                (async (sp, c) =>
+                        await ApplyHttpClientOptions(sp, c, _serviceAPIOpts.ApiBaseUrl,
+                                    _serviceAPIOpts.RequestTimeout))
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    var handler = GetPrimaryHttpMsgHandler(_serviceAPIOpts);
+                    handler.ServerCertificateCustomValidationCallback =
+                           (message, cert, chain, errors) => { return true; };
+                    return handler;
+                })
+                //.AddCorrelationIdForwarding() // add the handler to attach the correlation ID to outgoing requests for this named client
+                .AddHttpMessageHandler<NoOpDelegatingHandler>();
+
+
+            services.AddHttpClient<IDepartmentSectionService, DepartmentSectionService>
+                (async (sp, c) =>
+                        await ApplyHttpClientOptions(sp, c, _serviceAPIOpts.ApiBaseUrl,
+                                    _serviceAPIOpts.RequestTimeout))
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    var handler = GetPrimaryHttpMsgHandler(_serviceAPIOpts);
+                    handler.ServerCertificateCustomValidationCallback =
+                           (message, cert, chain, errors) => { return true; };
+                    return handler;
+                })
+                //.AddCorrelationIdForwarding() // add the handler to attach the correlation ID to outgoing requests for this named client
+                .AddHttpMessageHandler<NoOpDelegatingHandler>();
+
+
+            services.AddHttpClient<ICivilStatusService, CivilStatusService>
                 (async (sp, c) =>
                         await ApplyHttpClientOptions(sp, c, _serviceAPIOpts.ApiBaseUrl,
                                     _serviceAPIOpts.RequestTimeout))
@@ -80,19 +140,20 @@ namespace HRISBlazorServerApp
 
         public static IServiceCollection AddBlazorAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(option =>
-                {
-                    option.LoginPath = "/";
-                    //option.AccessDeniedPath = "/account/accessdenied";
-                    option.ReturnUrlParameter = "/";
-                    option.ExpireTimeSpan = TimeSpan.FromDays(1);
-                });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(2);
             });
+
+            services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+
+            services.AddBlazoredLocalStorage();
+            
+            services.AddScoped<TokenProvider>();
+
+            services.AddScoped<TokenConfig>(); 
 
             return services;
         }
@@ -107,7 +168,7 @@ namespace HRISBlazorServerApp
             return services;
         }
 
-        private static async Task ApplyHttpClientOptions(IServiceProvider sp, HttpClient c, 
+        private static async Task ApplyHttpClientOptions(IServiceProvider sp, HttpClient c,
             string baseUrl, int requestTimeout = 30)
         {
             c.BaseAddress = new Uri(baseUrl);
@@ -122,7 +183,7 @@ namespace HRISBlazorServerApp
             };
 
             if (svcOptions.DisableServerCertificateValidation)
-                _httpClientHandler.ServerCertificateCustomValidationCallback 
+                _httpClientHandler.ServerCertificateCustomValidationCallback
                     = (message, cert, chain, errors) => { return true; };
 
             return _httpClientHandler;

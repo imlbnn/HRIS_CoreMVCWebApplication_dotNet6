@@ -1,5 +1,7 @@
-﻿using HRISBlazorServerApp.Exceptions;
+﻿using HRISBlazorServerApp.APISettings;
+using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Models;
+using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 
 namespace HRISBlazorServerApp.Services
@@ -8,16 +10,26 @@ namespace HRISBlazorServerApp.Services
     {
         private readonly TokenProvider tokenProvider;
         protected readonly HttpClient HttpClient;
+        private readonly IConfiguration _config;
 
-        public ApiServiceBase(TokenProvider tokenProvider, HttpClient httpClient)
+        public ApiServiceBase(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration config)
         {
             this.tokenProvider = tokenProvider;
             HttpClient = httpClient;
+            _config = config;
         }
 
         public async virtual Task PrepareAuthenticatedClient()
         {
+            var _serviceAPIOpts = _config.GetSection(nameof(ServiceAPIOptions)).Get<ServiceAPIOptions>();
             var _accessToken = tokenProvider.AccessToken;
+            if(HttpClient.BaseAddress == null)
+            {
+                HttpClient.BaseAddress = new Uri(_serviceAPIOpts.ApiBaseUrl);
+                HttpClient.Timeout = TimeSpan.FromSeconds(_serviceAPIOpts.RequestTimeout);
+                HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }
+
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
         }
 

@@ -12,16 +12,26 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
     public class PageBase : ComponentBase
     {
         [Inject]
-        private IJSRuntime _jSRuntime { get; set; }
+        public IJSRuntime _jSRuntime { get; set; }
 
         [Inject]
-        private IMapper _mapper { get; set; }
+        public IMapper _mapper { get; set; }
 
         [Inject]
         public IEmployeeService employeeService { get; set; }
 
         [Inject]
         public IAccountService accountService { get; set; }
+
+        [Inject]
+        public IDepartmentService departmentService { get; set; }
+
+        [Inject]
+        public IDepartmentSectionService departmentSectionService { get; set; }
+
+        [Inject]
+        public ICivilStatusService civilStatusService { get; set; }
+
 
         [Inject]
         public DialogService dialogService { get; set; }

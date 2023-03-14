@@ -29,6 +29,22 @@ namespace HRIS.API.Controllers
             }
         }
 
+        [HttpGet("{departmentcode}")]
+        //Run and use Postman to call this request
+        public async Task<ActionResult<IEnumerable<GetDepartmentSectionDto>>> GetDepartmentalSectionByDepartmentCode(string departmentcode)
+        {
+            try
+            {
+                var _result = await Mediator.Send(new GetListOfDepartmentalSectionByDepartmentCodeQuery() { departmentCode = departmentcode });
+
+                return Ok(_result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            }
+        }
+
 
         [HttpPost]
         [Route("create")]

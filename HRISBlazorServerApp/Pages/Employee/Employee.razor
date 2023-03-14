@@ -4,56 +4,41 @@
 @inherits EmployeeBase
 <PageTitle>Employees</PageTitle>
 
-
-<style>
-    .custom-table-col-header {
-        font-size: 12px;
-        width: auto
-    }
-
-    .custom-table-col-row {
-        font-size: 10px;
-        width: auto
-    }
-
-</style>
-
 <h3>Employee</h3>
 
-<RadzenDataGrid @ref="grid"
-                Data="@getEmployees"
-                AllowColumnResize="false" LoadData="@LoadData"
-                IsLoading=@isLoading Count="@count"
-                AllowSorting="true" AllowFiltering="false" AllowPaging="true"
-                PageSize="15" PagerHorizontalAlign="HorizontalAlign.Center"
-                TItem="GetEmployeesDto" class="table table-bordered">
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Employee Name</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Department</th>
+            <th>Section</th>
+            <th>Date Of Birth</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in getEmployees)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-primary"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>@employee.EmpID</td>
+                <td>@employee.LastName</td>
+                <td>@employee.FirstName</td>
+                <td>@employee.MiddleName</td>
+                <td>@employee.Department.Description</td>
+                <td>@employee.DepartmentSection.Description</td>
+                <td>@employee.DateOfBirth.ToString("dd/MMM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateNewEmployee">Create New Employee</button>
 
-    <Columns>
-
-        <RadzenDataGridColumn TItem="GetEmployeesDto" Property="DateOfBirth"
-                              Title="Date Of Birth" Sortable="true"
-                              HeaderCssClass="custom-table-col-header" CssClass="custom-table-col-row">
-            <Template Context="context">
-                @context.DateOfBirth.ToString("MM/dd/yyyy")
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn TItem="GetEmployeesDto" Property="LastName"
-                              Filterable="false" Title="LastName" Sortable="true"
-                              HeaderCssClass="custom-table-col-header"
-                              CssClass="custom-table-col-row">
-            <Template Context="context">
-                @context.LastName.ToUpper()
-            </Template>
-        </RadzenDataGridColumn>
-
-    </Columns>
-
-
-
-
-
-</RadzenDataGrid>
 
 
 

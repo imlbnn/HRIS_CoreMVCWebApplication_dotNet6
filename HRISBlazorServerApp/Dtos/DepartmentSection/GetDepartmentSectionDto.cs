@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HRIS.Application.DepartmentalSections.Dtos.Queries
+namespace HRISBlazorServerApp.Dtos.DepartmentSection
 {
     public class GetDepartmentSectionDto
     {

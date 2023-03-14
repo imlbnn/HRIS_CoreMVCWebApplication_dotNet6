@@ -8,6 +8,7 @@ using HRIS.Application.Common.Models;
 using HRIS.Infrastructure;
 using HRIS.Infrastructure.Identity;
 using HRIS.API.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace HRIS.API.Controllers
 {
@@ -234,8 +235,27 @@ namespace HRIS.API.Controllers
             return Ok(user);
         }
 
+        [HttpGet]
+        [Route("IsValidToken/{token}")]
+        //Run and use Postman to call this request
+        public async Task<IActionResult> IsValidToken(string token)
+        {
+            bool isValid = false;
 
+            JwtSecurityToken jwtSecurityToken;
+            
+            try
+            {
+                jwtSecurityToken = new JwtSecurityToken(token);
+            }
+            catch (Exception)
+            {
+                return Ok(isValid);
+            }
 
+            isValid = jwtSecurityToken.ValidTo > DateTime.UtcNow;
 
+            return Ok(isValid);
+        }
     }
 }

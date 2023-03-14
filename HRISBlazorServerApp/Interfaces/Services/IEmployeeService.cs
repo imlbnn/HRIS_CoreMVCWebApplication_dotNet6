@@ -1,4 +1,5 @@
 ﻿using HRISBlazorServerApp.Dtos.Employee;
+using HRISBlazorServerApp.Models;
 
 namespace HRISBlazorServerApp.Interfaces.Services
 {
@@ -7,8 +8,8 @@ namespace HRISBlazorServerApp.Interfaces.Services
         Task<IEnumerable<GetEmployeesDto>> GetEmployees();
         Task<GetEmployeesDto> GetEmployeeByEmpID(string empid);
 
-        Task<bool> CreateEmployee(CreateEmployeeDto request);
-        Task<Tuple<bool, string>> UpdateEmployee(UpdateEmployeeDto request);
+        Task<bool> CreateEmployee(CreateEmployee request);
+        Task<Tuple<bool, string>> UpdateEmployee(UpdateEmployee request);
         Task<bool> ArchiveEmployee(string empid);
     }
 }
