@@ -6,6 +6,7 @@ using HRIS.Application.Employees.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace HRIS.API.Controllers
 {
@@ -64,21 +65,21 @@ namespace HRIS.API.Controllers
             }
         }
 
-        [HttpGet("{name}")]
-        //Run and use Postman to call this request
-        public async Task<ActionResult<IEnumerable<GetEmployeesDto>>> GetEmployeeByName(string name)
-        {
-            try
-            {
-                var _result = await Mediator.Send(new GetEmployeeConsistingNameQuery() { Name = name });
+        //[HttpGet]
+        ////Run and use Postman to call this request
+        //public async Task<ActionResult<IEnumerable<GetEmployeesDto>>> GetEmployeeByName([FromQuery] GetEmployeeConsistingNameQuery request)
+        //{
+        //    try
+        //    {
+        //        var _result = await Mediator.Send(request);
 
-                return Ok(_result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
-            }
-        }
+        //        return Ok(_result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+        //    }
+        //}
 
 
         [HttpPost("create")]
@@ -112,7 +113,7 @@ namespace HRIS.API.Controllers
         }
 
 
-        [HttpDelete("archive/{empid}")]
+        [HttpPut("archive/{empid}")]
         //Run and use Postman to call this request
         public async Task<ActionResult<CreateEmployeeDto>> ArchiveEmployee( string empid)
         {

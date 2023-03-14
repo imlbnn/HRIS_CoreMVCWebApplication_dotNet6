@@ -66,6 +66,21 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
             UriHelper.NavigateTo($"employee/edit/{empid}");
         }
 
+        public async Task DeleteEmployee(string empid)
+        {
+            await employeeService.ArchiveEmployee(empid);
+            GetEmployees();
+        }
+
+        private async void GetEmployees()
+        {
+            getEmployees.Clear();
+
+            getEmployees = (await employeeService.GetEmployees().ConfigureAwait(false)).ToList();
+
+            await InvokeAsync(() => StateHasChanged());
+        }
+
         public void ViewEmployee(string empid)
         {
             UriHelper.NavigateTo($"employee/{empid}");

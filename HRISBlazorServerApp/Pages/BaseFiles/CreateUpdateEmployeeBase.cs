@@ -29,17 +29,23 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         {
             btnText = string.IsNullOrEmpty(empid) ? "Save New Employee" : "Update Employee";
 
-            if (!string.IsNullOrEmpty(empid))
-                updateEmployee.EmpID = empid;
-
             departmentList = (await departmentService.GetDepartments().ConfigureAwait(false)).ToList();
 
             civilStatusList = (await civilStatusService.GetCivilStatus().ConfigureAwait(false)).ToList();
         }
 
+        public async Task LoadEmployeeDetails()
+        {
+            var data = (await employeeService.GetEmployeeByEmpID(empid).ConfigureAwait(false));
+
+            updateEmployee = _mapper.Map<UpdateEmployee>(data);
+
+            departmentSectionList = (await departmentSectionService.GetDepartmentalSection(updateEmployee.DepartmentCode).ConfigureAwait(false)).ToList();
+        }
+
         public async Task HandleSubmit()
         {
-            if (!string.IsNullOrEmpty(empid))
+            if (string.IsNullOrEmpty(empid))
             {
                 await employeeService.CreateEmployee(createEmployee);
             }
@@ -60,7 +66,7 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         public async Task OnValueChanged(string value)
         {
             deptCode = value;
-            if (!string.IsNullOrEmpty(empid))
+            if (string.IsNullOrEmpty(empid))
             {
                 createEmployee.DepartmentCode = deptCode;
                 createEmployee.DepartmentName = departmentList.FirstOrDefault(x => x.Code == deptCode).Description;
@@ -77,12 +83,7 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         protected override async Task OnParametersSetAsync()
         {
             if (!string.IsNullOrEmpty(empid))
-            {
-                var data = (await employeeService.GetEmployeeByEmpID(empid));
-                updateEmployee = _mapper.Map<UpdateEmployee>(data);
-            }
+                await LoadEmployeeDetails();
         }
-
-
     }
 }

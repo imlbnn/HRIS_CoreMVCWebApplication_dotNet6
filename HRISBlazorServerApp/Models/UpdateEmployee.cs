@@ -1,6 +1,9 @@
-﻿namespace HRISBlazorServerApp.Models
+﻿using HRISBlazorServerApp.Dtos.Employee;
+using HRISBlazorServerApp.Mappings;
+
+namespace HRISBlazorServerApp.Models
 {
-    public class UpdateEmployee
+    public class UpdateEmployee : IMapFrom<GetEmployeesDto>
     {
         public string EmpID { get; set; }
 

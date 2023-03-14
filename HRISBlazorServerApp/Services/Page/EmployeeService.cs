@@ -132,10 +132,11 @@ namespace HRISBlazorServerApp.Services.Page
             try
             {
                 var _url =  $"api/employee/archive/{empid}";
-                
-                var _result = await base.PutAsync(_url.ToString(), true);
 
-                return _result;
+            
+                var _result = await base.PutAsync<Tuple<bool,string>>(_url, null);
+
+                return _result.Item1;
             }
             catch (ApplicationException)
             {
