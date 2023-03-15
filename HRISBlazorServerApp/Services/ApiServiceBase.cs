@@ -94,11 +94,11 @@ namespace HRISBlazorServerApp.Services
             if (!_response.IsSuccessStatusCode)
                 await ThrowAPIErrorException(_response);
 
-            var responseBody = await _response.Content.ReadAsStringAsync();
+            //var responseBody = await _response.Content.ReadAsStringAsync();
 
-            var _results = await Task.FromResult(JsonConvert.DeserializeObject<TValue>(responseBody));
+            //var _results = await Task.FromResult(JsonConvert.DeserializeObject<TValue>(responseBody));
 
-            //var _results = await _response.Content.ReadFromJsonAsync<TValue>();
+            var _results = await _response.Content.ReadFromJsonAsync<TValue>();
 
             return _results;
         }
