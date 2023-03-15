@@ -28,12 +28,6 @@ namespace HRISBlazorServerApp.Models
 
     public class TokenProvider : PageModel
     {
-        private readonly ITokenProviderService _tokenProviderService;
-        public TokenProvider(ITokenProviderService tokenProviderService)
-        {
-            _tokenProviderService= tokenProviderService;
-        }
-
         public async Task<IActionResult> OnGet()
         {
             if (User.Identity.IsAuthenticated)
@@ -43,21 +37,9 @@ namespace HRISBlazorServerApp.Models
                 AccessToken = token;
             }
 
-            if (string.IsNullOrEmpty(AccessToken))
-            {
-                var res = await _tokenProviderService.IsValidToken(CurrentAccessToken);
-
-                if (res)
-                    AccessToken = CurrentAccessToken;
-                else
-                    CurrentAccessToken = string.Empty;
-            }
-
             return Page();
         }
 
         public string AccessToken { get; set; }
-
-        public string CurrentAccessToken { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Models;
 
-namespace HRISBlazorServerApp.Services.Page
+namespace HRISBlazorServerApp.Services.PageServices
 {
     public class EmployeeService : ApiServiceBase, IEmployeeService
     {
@@ -13,13 +13,13 @@ namespace HRISBlazorServerApp.Services.Page
         {
         }
 
-        public async Task<IEnumerable<GetEmployeesDto>> GetEmployees()
+        public async Task<PaginatedList<GetEmployeesDto>> GetEmployees(string searchKey, int pageNumber, int pageSize, string orderBy = "LastName")
         {
             try
             {
-                var _url = "api/employee";
+                var _url = $"api/employee/paged?searchKey={(string.IsNullOrEmpty(searchKey) ? "\"\"" : searchKey)}&orderBy={orderBy}&pageNumber={pageNumber}&pageSize={pageSize}";
 
-                var _result = await base.GetAsync<IEnumerable<GetEmployeesDto>>(_url.ToString(), true);
+                var _result = await base.GetAsync<PaginatedList<GetEmployeesDto>>(_url.ToString(), true);
 
                 return _result;
             }

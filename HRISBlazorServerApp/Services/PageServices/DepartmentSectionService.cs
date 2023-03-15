@@ -3,7 +3,7 @@ using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Models;
 
-namespace HRISBlazorServerApp.Services.Page
+namespace HRISBlazorServerApp.Services.PageServices
 {
     public class DepartmentSectionService : ApiServiceBase, IDepartmentSectionService
     {

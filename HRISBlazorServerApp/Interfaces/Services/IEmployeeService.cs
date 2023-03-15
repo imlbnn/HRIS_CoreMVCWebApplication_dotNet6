@@ -5,7 +5,8 @@ namespace HRISBlazorServerApp.Interfaces.Services
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<GetEmployeesDto>> GetEmployees();
+        Task<PaginatedList<GetEmployeesDto>> GetEmployees(string searchKey, int pageNumber, int pageSize, string orderBy = "LastName");
+        
         Task<GetEmployeesDto> GetEmployeeByEmpID(string empid);
 
         Task<bool> CreateEmployee(CreateEmployee request);

@@ -2,6 +2,7 @@
 using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Models;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
 namespace HRISBlazorServerApp.Services
@@ -93,7 +94,12 @@ namespace HRISBlazorServerApp.Services
             if (!_response.IsSuccessStatusCode)
                 await ThrowAPIErrorException(_response);
 
-            var _results = await _response.Content.ReadFromJsonAsync<TValue>();
+            var responseBody = await _response.Content.ReadAsStringAsync();
+
+            var _results = await Task.FromResult(JsonConvert.DeserializeObject<TValue>(responseBody));
+
+            //var _results = await _response.Content.ReadFromJsonAsync<TValue>();
+
             return _results;
         }
 

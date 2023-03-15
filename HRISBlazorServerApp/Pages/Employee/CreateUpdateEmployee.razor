@@ -10,11 +10,14 @@
     <h3>Create Employee</h3>
 
     <EditForm Model="createEmployee" OnSubmit="HandleSubmit">
-
+        <DataAnnotationsValidator />
+        <ValidationSummary />
         <div class="row">
             <div class="col-md-4">
                 <label class="col-form-label" for="firstname">First Name</label>
                 <InputText id="firstname" @bind-Value="createEmployee.FirstName" class="form-control"></InputText>
+                <ValidationMessage For="@(() => createEmployee.FirstName)" />
+
             </div>
             <div class="col-md-4">
                 <label class="col-form-label" for="middlename">Middle Name</label>
@@ -23,6 +26,7 @@
             <div class="col-md-4">
                 <label class="col-form-label" for="lastname">Last Name</label>
                 <InputText id="lastname" @bind-Value="createEmployee.LastName" class="form-control"></InputText>
+                <ValidationMessage For="@(() => createEmployee.LastName)" />
             </div>
         </div>
 
@@ -40,6 +44,7 @@
                         <option value="@dept.Code">@dept.Description</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => createEmployee.DepartmentCode)" />
             </div>
             <div class="col-md-4">
                 <label class="col-form-label">Section</label><br />
@@ -53,6 +58,7 @@
                         }
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => createEmployee.DepartmentSectionCode)" />
             </div>
 
             <div class="col-md-4">
@@ -64,6 +70,7 @@
                         <option value="@civilstat.Code">@civilstat.Description</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => createEmployee.CivilStatusCode)" />
             </div>
 
         </div>
@@ -72,6 +79,7 @@
             <div class="col-md-4">
                 <label class="col-form-label" for="dateOfbirth">Date Of Birth</label>
                 <InputDate id="dateOfbirth" @bind-Value="createEmployee.DateOfBirth" class="form-control"></InputDate>
+                <ValidationMessage For="@(() => createEmployee.DateOfBirth)" />
             </div>
         </div>
 
@@ -92,6 +100,7 @@ else
             <div class="col-md-4">
                 <label class="col-form-label" for="firstname">First Name</label>
                 <InputText id="firstname" @bind-Value="updateEmployee.FirstName" class="form-control"></InputText>
+                <ValidationMessage For="@(() => updateEmployee.FirstName)" />
             </div>
             <div class="col-md-4">
                 <label class="col-form-label" for="middlename">Middle Name</label>
@@ -100,6 +109,7 @@ else
             <div class="col-md-4">
                 <label class="col-form-label" for="lastname">Last Name</label>
                 <InputText id="lastname" @bind-Value="updateEmployee.LastName" class="form-control"></InputText>
+                <ValidationMessage For="@(() => updateEmployee.LastName)" />
             </div>
         </div>
 
@@ -117,6 +127,7 @@ else
                         <option value="@dept.Code">@dept.Description</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => updateEmployee.DepartmentCode)" />
             </div>
             <div class="col-md-4">
                 <label class="col-form-label">Section</label><br />
@@ -130,6 +141,7 @@ else
                         }
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => updateEmployee.DepartmentSectionCode)" />
             </div>
 
             <div class="col-md-4">
@@ -141,6 +153,7 @@ else
                         <option value="@civilstat.Code">@civilstat.Description</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => updateEmployee.CivilStatusCode)" />
             </div>
 
         </div>
@@ -149,6 +162,7 @@ else
             <div class="col-md-4">
                 <label class="col-form-label" for="dateOfbirth">Date Of Birth</label>
                 <InputDate id="dateOfbirth" @bind-Value="updateEmployee.DateOfBirth" class="form-control"></InputDate>
+                <ValidationMessage For="@(() => updateEmployee.DateOfBirth)" />
             </div>
         </div>
 

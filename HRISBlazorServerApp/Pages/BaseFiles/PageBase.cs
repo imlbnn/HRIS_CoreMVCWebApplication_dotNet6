@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HRISBlazorServerApp.Interfaces.Services;
-using HRISBlazorServerApp.Services.Page;
+using HRISBlazorServerApp.Services.PageServices;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;

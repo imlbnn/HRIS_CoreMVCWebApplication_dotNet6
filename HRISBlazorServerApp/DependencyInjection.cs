@@ -8,7 +8,7 @@ using HRISBlazorServerApp.Mappings;
 using HRISBlazorServerApp.Models;
 using HRISBlazorServerApp.Providers;
 using HRISBlazorServerApp.Services;
-using HRISBlazorServerApp.Services.Page;
+using HRISBlazorServerApp.Services.PageServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;

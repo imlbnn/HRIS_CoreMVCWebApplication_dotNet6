@@ -2,12 +2,17 @@
 using Radzen.Blazor;
 using HRISBlazorServerApp.Dtos.Employee;
 using Microsoft.AspNetCore.Components;
+using static System.Net.WebRequestMethods;
 
 namespace HRISBlazorServerApp.Pages.BaseFiles
 {
 
     public class EmployeeBase : PageBase
     {
+        public int CurPage = 1;
+
+        public int TotalPages;
+
         public int count;
 
         public List<GetEmployeesDto> getEmployees = new List<GetEmployeesDto>();
@@ -23,35 +28,36 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         private IQueryable<GetEmployeesDto> _query;
 
 
-        public async Task LoadData(LoadDataArgs args)
-        {
-            try
-            {
-                isLoading = true;
-                var data = (await employeeService.GetEmployees());
+        //public async Task LoadData(LoadDataArgs args)
+        //{
+        //    try
+        //    {
+        //        isLoading = true;
+        //        var data = (await employeeService.GetEmployees());
 
-                _query = data.AsQueryable();
+        //        _query = data.AsQueryable();
 
-                count = _query.Count();
+        //        count = _query.Count();
 
-                getEmployees = _query
-                        .Skip(args.Skip.Value)
-                        .Take(args.Top.Value)
-                        .ToList();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            finally
-            {
-                isLoading = false;
-            }
-        }
+        //        getEmployees = _query
+        //                .Skip(args.Skip.Value)
+        //                .Take(args.Top.Value)
+        //                .ToList();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        isLoading = false;
+        //    }
+        //}
 
         protected override async Task OnInitializedAsync()
         {
-            getEmployees = (await employeeService.GetEmployees().ConfigureAwait(false)).ToList();
+            await ShowPage();
+            //getEmployees = (await employeeService.GetEmployees().ConfigureAwait(false)).ToList();
 
             //await base.OnInitializedAsync();
         }
@@ -75,8 +81,12 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         private async void GetEmployees()
         {
             getEmployees.Clear();
-
-            getEmployees = (await employeeService.GetEmployees().ConfigureAwait(false)).ToList();
+            
+            CurPage = 1;
+            
+            var data = (await employeeService.GetEmployees(string.Empty, CurPage, 10).ConfigureAwait(false));
+            getEmployees = data.Items.ToList();
+            TotalPages = data.TotalPages;
 
             await InvokeAsync(() => StateHasChanged());
         }
@@ -85,6 +95,33 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         {
             UriHelper.NavigateTo($"employee/{empid}");
         }
+
+        protected async Task NextPage()
+        {
+            CurPage++;
+            await ShowPage();
+        }
+
+        protected async Task ShowPage(int i)
+        {
+            CurPage = i;
+            await ShowPage();
+        }
+
+        protected async Task PrevPage()
+        {
+            CurPage--;
+            await ShowPage();
+
+        }
+
+        protected async Task ShowPage()
+        {
+            var data = (await employeeService.GetEmployees("", CurPage, 10).ConfigureAwait(false));
+            getEmployees = data.Items.ToList();
+            TotalPages = data.TotalPages;
+        }
+
 
     }
 }

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace HRISBlazorServerApp.Services.Page
+namespace HRISBlazorServerApp.Services.PageServices
 {
     public class AccountService : ApiServiceBase, IAccountService
     {
@@ -69,12 +69,10 @@ namespace HRISBlazorServerApp.Services.Page
             return user;
         }
 
-        
-
         public async Task Logout()
         {
             await _localStorage.ClearAsync();
-            tokenProvider.AccessToken= tokenProvider.CurrentAccessToken = string.Empty;
+            tokenProvider.AccessToken =  string.Empty;
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }

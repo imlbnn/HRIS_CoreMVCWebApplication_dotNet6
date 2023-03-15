@@ -20,7 +20,9 @@ namespace HRIS.Infrastructure.Persistence.Repositories
                                   : base(dbContext, dateTimeService, currentUserService)
         {
             _dbContext = dbContext;
-            SetGetQuery(dbContext.Set<Employee>().Where(x => x.IsDeleted == false));
+            SetGetQuery(dbContext.Set<Employee>()
+                //.Where(x => x.IsDeleted == false)
+                );
         }
 
         public IEmployeeRepository IncludeCivilStatus()

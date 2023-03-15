@@ -4,7 +4,7 @@ using HRISBlazorServerApp.Interfaces.Services;
 using HRISBlazorServerApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HRISBlazorServerApp.Services.Page
+namespace HRISBlazorServerApp.Services.PageServices
 {
     public class DepartmentService : ApiServiceBase, IDepartmentService
     {

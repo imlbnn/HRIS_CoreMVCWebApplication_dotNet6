@@ -37,9 +37,9 @@ namespace HRISBlazorServerApp.Providers
 
             if (string.IsNullOrEmpty(savedToken))
             {
-                var res = await _tokenProviderService.IsValidToken(_tokenConfig.CurrentAccessToken);
+                var _isValid = await _tokenProviderService.IsValidToken(_tokenConfig.CurrentAccessToken);
 
-                if (res)
+                if (_isValid)
                 {
                     savedToken = tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken;
                 }
