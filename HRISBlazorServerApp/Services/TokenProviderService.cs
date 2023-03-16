@@ -2,6 +2,8 @@
 using HRISBlazorServerApp.Exceptions;
 using HRISBlazorServerApp.Interfaces;
 using HRISBlazorServerApp.Models;
+using HRISBlazorServerApp.Providers;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -9,7 +11,9 @@ namespace HRISBlazorServerApp.Services
 {
     public class TokenProviderService : ITokenProviderService
     {
-        protected readonly HttpClient _httpClient;
+        private readonly TokenProvider tokenProvider;
+        private readonly HttpClient _httpClient;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly IConfiguration _config;
 
         public TokenProviderService(HttpClient httpClient, IConfiguration configuration)
@@ -27,6 +31,30 @@ namespace HRISBlazorServerApp.Services
             return result;
         }
 
+        public async Task<LoginResult> RefreshToken(string username)
+        {
+            var _url = $"api/authentication/refreshtoken?username={username}";
+
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+
+            tokenProvider.AccessToken = string.Empty;
+
+            var _result = await PostAsync<LoginResult>(_url.ToString(), null);
+
+            return _result; ;
+        }
+
+        private async Task<ApplicationUser> GetUserDetails(string username)
+        {
+            var _url = $"api/authentication/GetUserByUsername?username={username}";
+
+            var user = await GetAsync<ApplicationUser>(_url.ToString(), true);
+
+            if (string.IsNullOrEmpty(user.Email))
+                throw new ApplicationException("No User Found");
+
+            return user;
+        }
 
         private async Task PrepareAuthenticatedClient()
         {
@@ -75,6 +103,23 @@ namespace HRISBlazorServerApp.Services
                 await ThrowAPIErrorException(_response);
 
             var _results = await _response.Content.ReadFromJsonAsync<TValue>();
+            return _results;
+        }
+
+        protected async Task<TValue> PostAsync<TValue>(string url, TValue model)
+        {
+            return await PostAsync<TValue, TValue>(url, model);
+        }
+
+        protected async Task<TOutput> PostAsync<TValue, TOutput>(string url, TValue model)
+        {
+            await PrepareAuthenticatedClient();
+            var _response = await _httpClient.PostAsJsonAsync(url, model);
+
+            if (!_response.IsSuccessStatusCode)
+                await ThrowAPIErrorException(_response);
+
+            var _results = await _response.Content.ReadFromJsonAsync<TOutput>();
             return _results;
         }
 

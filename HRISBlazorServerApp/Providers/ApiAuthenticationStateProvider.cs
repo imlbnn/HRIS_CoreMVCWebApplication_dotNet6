@@ -44,7 +44,24 @@ namespace HRISBlazorServerApp.Providers
                     savedToken = tokenProvider.AccessToken = _tokenConfig.CurrentAccessToken;
                 }
                 else
+                {
+                    var result = await _tokenProviderService.RefreshToken(_tokenConfig.CurrentUser);
+
+                    if (result != null)
+                    {
+                        if (result.Success)
+                        {
+                            _tokenConfig.SetToken(result.Token);
+                            savedToken = tokenProvider.AccessToken = result.Token;
+                        }
+                        else
+                        {
+                            _tokenConfig.SetToken(string.Empty);
+                        }
+                    }
+
                     _tokenConfig.SetToken(string.Empty);
+                }
             }
 
             if (!string.IsNullOrEmpty(savedToken))

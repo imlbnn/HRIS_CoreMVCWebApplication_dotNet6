@@ -9,6 +9,11 @@ using HRIS.Infrastructure;
 using HRIS.Infrastructure.Identity;
 using HRIS.API.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
+using System.Data.Entity;
+using System.Security.Cryptography;
+using System.Text;
+using HRIS.API.Models;
+using Newtonsoft.Json.Linq;
 
 namespace HRIS.API.Controllers
 {
@@ -243,7 +248,7 @@ namespace HRIS.API.Controllers
             bool isValid = false;
 
             JwtSecurityToken jwtSecurityToken;
-            
+
             try
             {
                 jwtSecurityToken = new JwtSecurityToken(token);
@@ -257,5 +262,50 @@ namespace HRIS.API.Controllers
 
             return Ok(isValid);
         }
+
+
+        // GET: api/Users
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult> RefreshToken([FromQuery] string username)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(username);
+
+                var jwtToken = _jWTConfiguration.GenerateJwtToken(user);
+
+                return Ok(new
+                {
+                    Message = "Token Successfully Refreshed",
+                    Success = true,
+                    Token = jwtToken
+                });
+
+            }
+            catch (Exception)
+            {
+                return BadRequest(new
+                {
+                    Message = "Error Refreshing Token",
+                    Success = false,
+                    Token = string.Empty
+                });
+            }
+        }
+
+        // GET: api/Users
+        [HttpPost("GetUserByAccessToken")]
+        public async Task<ActionResult<ApplicationUser>> GetUserByAccessToken([FromBody] string accessToken)
+        {
+            ApplicationUser user = await _jWTConfiguration.GetUserFromAccessToken(accessToken);
+
+            if (user != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
     }
 }

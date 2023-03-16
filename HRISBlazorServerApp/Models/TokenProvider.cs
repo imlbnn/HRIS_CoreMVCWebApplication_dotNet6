@@ -17,11 +17,19 @@ namespace HRISBlazorServerApp.Models
     {
         public string CurrentAccessToken { get; private set; }
 
+        public string CurrentUser { get; private set; }
+
         public event Func<Task> Notify;
 
-        public void SetToken(string name)
+        public void SetToken(string token)
         {
-            CurrentAccessToken = name;
+            CurrentAccessToken = token;
+            Notify?.Invoke();
+        }
+
+        public void SetUsername(string name)
+        {
+            CurrentUser = name;
             Notify?.Invoke();
         }
     }

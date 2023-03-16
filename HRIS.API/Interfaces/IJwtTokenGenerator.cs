@@ -16,6 +16,8 @@ namespace HRIS.API.Interfaces
 
         //Task<AuthResult> VerifyAndGenerateToken(TokenRequest tokenRequest);
 
+        Task<ApplicationUser> GetUserFromAccessToken(string accessToken);
+
         DateTime UnixTimeStampToDateTime(long unixTimeStamp);
 
         string RandomString(int length);

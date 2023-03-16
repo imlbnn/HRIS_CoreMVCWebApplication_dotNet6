@@ -50,27 +50,27 @@
     </tbody>
 </table>
 
-    <div>
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
+<div>
+    <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
 
-        @for (int i = CurPage; i <= TotalPages; i++)
+    @for (int i = CurPage; i <= TotalPages; i++)
+    {
+        int j = i;
+        @if (i > 0)
         {
-            int j = i;
-            @if (i > 0)
+            if (i == CurPage)
             {
-                if (i == CurPage)
-                {
-                    <span class="px-2" style="font-weight:bold;cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-                else
-                {
-                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
+                <span class="px-2" style="font-weight:bold;cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
             }
-
+            else
+            {
+                <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+            }
         }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
-    </div>
+
+    }
+    <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
+</div>
 
 
 

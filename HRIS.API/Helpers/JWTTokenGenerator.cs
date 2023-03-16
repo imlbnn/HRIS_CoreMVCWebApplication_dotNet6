@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace HRIS.API.Helpers
@@ -41,13 +42,15 @@ namespace HRIS.API.Helpers
                 {
                     new Claim("Id", user.Id),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.GivenName, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.NameId, user.Id),
                     new Claim(JwtRegisteredClaimNames.GivenName, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -63,8 +66,11 @@ namespace HRIS.API.Helpers
             var claims = new List<Claim>
             {
                 new Claim("Id", user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -92,6 +98,41 @@ namespace HRIS.API.Helpers
             }
 
             return claims;
+        }
+
+        public async Task<ApplicationUser> GetUserFromAccessToken(string accessToken)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
+
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+
+                SecurityToken securityToken;
+                var principle = tokenHandler.ValidateToken(accessToken, tokenValidationParameters, out securityToken);
+
+                JwtSecurityToken jwtSecurityToken = securityToken as JwtSecurityToken;
+
+                if (jwtSecurityToken != null && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var userId = principle.FindFirst(ClaimTypes.Name)?.Value;
+
+                    return await _userManager.FindByIdAsync(userId);
+                }
+            }
+            catch (Exception)
+            {
+                return new ApplicationUser();
+            }
+
+            return new ApplicationUser();
         }
 
         public DateTime UnixTimeStampToDateTime(long unixTimeStamp)

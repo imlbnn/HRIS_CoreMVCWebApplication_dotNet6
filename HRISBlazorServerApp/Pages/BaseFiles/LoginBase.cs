@@ -25,6 +25,7 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
                 if (result.Success)
                 {
                     Config.SetToken(result.Token);
+                    Config.SetUsername(loginModel.Username);
                     UriHelper.NavigateTo("/main");
                 }
                 else

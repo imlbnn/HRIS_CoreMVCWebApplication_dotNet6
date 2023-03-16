@@ -72,6 +72,8 @@ namespace HRISBlazorServerApp.Services.PageServices
         public async Task Logout()
         {
             await _localStorage.ClearAsync();
+            _tokenConfig.SetToken(string.Empty);
+            _tokenConfig.SetUsername(string.Empty);
             tokenProvider.AccessToken =  string.Empty;
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
