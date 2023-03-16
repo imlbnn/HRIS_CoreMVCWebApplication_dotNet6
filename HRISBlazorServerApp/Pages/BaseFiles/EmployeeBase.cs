@@ -9,11 +9,18 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
     public class EmployeeBase : PageBase
     {
+
         public int CurPage = 1;
 
         public int TotalPages;
 
         public int count;
+
+        public int minPage = 1;
+        public int maxPage;
+        public int minRange { get; set; }
+        public int maxRange { get; set; }
+
 
         public List<GetEmployeesDto> getEmployees = new List<GetEmployeesDto>();
 
@@ -81,12 +88,18 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
         private async void GetEmployees()
         {
             getEmployees.Clear();
-            
+
             CurPage = 1;
-            
+
             var data = (await employeeService.GetEmployees(string.Empty, CurPage, 10).ConfigureAwait(false));
+            
             getEmployees = data.Items.ToList();
-            TotalPages = data.TotalPages;
+
+            TotalPages = maxPage = data.TotalPages;
+
+            minRange = Math.Max(minPage, CurPage - 2);
+
+            maxRange = Math.Min(maxPage, CurPage + 2);
 
             await InvokeAsync(() => StateHasChanged());
         }
@@ -98,8 +111,11 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
         protected async Task NextPage()
         {
-            CurPage++;
-            await ShowPage();
+            if (CurPage < TotalPages)
+            {
+                CurPage++;
+                await ShowPage();
+            }
         }
 
         protected async Task ShowPage(int i)
@@ -110,18 +126,29 @@ namespace HRISBlazorServerApp.Pages.BaseFiles
 
         protected async Task PrevPage()
         {
-            CurPage--;
-            await ShowPage();
+            if (CurPage > 1)
+            {
+                CurPage--;
+                await ShowPage();
+            }
 
         }
 
         protected async Task ShowPage()
         {
             var data = (await employeeService.GetEmployees("", CurPage, 10).ConfigureAwait(false));
+            
             getEmployees = data.Items.ToList();
-            TotalPages = data.TotalPages;
-        }
+            
+            TotalPages = maxPage = data.TotalPages;
+            
+            minRange = Math.Max(minPage, CurPage - 2);
+
+            maxRange = Math.Min(maxPage, CurPage + 2);
 
 
     }
+
+
+}
 }

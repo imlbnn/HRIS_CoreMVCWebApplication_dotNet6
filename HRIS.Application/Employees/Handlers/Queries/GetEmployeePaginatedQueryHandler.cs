@@ -64,9 +64,16 @@ namespace HRIS.Application.Employees.Handlers.Queries
                                         request.PageSize,
                                         cancellationToken);
 
+            var totalCount = await _employeeRepository
+                .IncludeDepartment()
+                .IncludeDepartmentSection()
+                .IncludeCivilStatus()
+                .SetOrderBy(request.OrderBy)
+                .GetAllAsync();
+
             var data = _Mapper.Map<IEnumerable<GetEmployeesDto>>(result.Items);
 
-            var paginatedList = new PaginatedList<GetEmployeesDto>(data.ToList(), data.Count(), request.PageNumber, request.PageSize); ;
+            var paginatedList = new PaginatedList<GetEmployeesDto>(data.ToList(), totalCount.Count, request.PageNumber, request.PageSize); ;
 
             return paginatedList;
 

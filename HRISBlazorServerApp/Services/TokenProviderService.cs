@@ -35,10 +35,6 @@ namespace HRISBlazorServerApp.Services
         {
             var _url = $"api/authentication/refreshtoken?username={username}";
 
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-
-            tokenProvider.AccessToken = string.Empty;
-
             var _result = await PostAsync<LoginResult>(_url.ToString(), null);
 
             return _result; ;

@@ -9,7 +9,6 @@ using HRIS.Infrastructure;
 using HRIS.Infrastructure.Identity;
 using HRIS.API.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
-using System.Data.Entity;
 using System.Security.Cryptography;
 using System.Text;
 using HRIS.API.Models;
@@ -266,7 +265,7 @@ namespace HRIS.API.Controllers
 
         // GET: api/Users
         [HttpPost("RefreshToken")]
-        public async Task<ActionResult> RefreshToken([FromQuery] string username)
+        public async Task<IActionResult> RefreshToken([FromQuery] string username)
         {
             try
             {
@@ -295,13 +294,13 @@ namespace HRIS.API.Controllers
 
         // GET: api/Users
         [HttpPost("GetUserByAccessToken")]
-        public async Task<ActionResult<ApplicationUser>> GetUserByAccessToken([FromBody] string accessToken)
+        public async Task<IActionResult> GetUserByAccessToken([FromBody] string accessToken)
         {
             ApplicationUser user = await _jWTConfiguration.GetUserFromAccessToken(accessToken);
 
             if (user != null)
             {
-                return user;
+                return Ok(user);
             }
 
             return null;

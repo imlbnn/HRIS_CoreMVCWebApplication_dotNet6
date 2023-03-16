@@ -4,47 +4,52 @@
 @inherits EmployeeBase
 <PageTitle>Employees</PageTitle>
 
+<style>
+    .columnWidth{
+        width: 250px
+    }
+</style>
+
 <h3>Employee</h3>
 
 <button class="btn btn-primary" @onclick="CreateNewEmployee">Create New Employee</button>
 
 <br />
 <br />
-
 <table class="table">
     <thead>
         <tr>
             <th></th>
-            <th>Employee Name</th>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Department</th>
-            <th>Section</th>
-            <th>Date Of Birth</th>
+            <th class="columnWidth">Employee Name</th>
+            <th class="columnWidth">Last Name</th>
+            <th class="columnWidth">First Name</th>
+            <th class="columnWidth">Middle Name</th>
+            <th class="columnWidth">Department</th>
+            <th class="columnWidth">Section</th>
+            <th class="columnWidth">Date Of Birth</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var employee in getEmployees)
         {
             <tr>
-                <td>
-                    <table>
-                        <tr>
-
-                            <td><button class="btn btn-primary" @onclick="(() => EditEmployee(employee.EmpID))"><i class="oi oi-pencil"></i></button></td>
-
-                            <td><button class="btn btn-danger" @onclick="(async() => await DeleteEmployee(employee.EmpID))"><i class="oi oi-trash"></i></button></td>
-                        </tr>
-                    </table>
+                <td style="width:130px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button class="btn btn-primary" @onclick="(() => EditEmployee(employee.EmpID))"><i class="oi oi-pencil"></i></button>
+                        </div>
+                        <div class="col-sm-6">
+                        <button class="btn btn-danger" @onclick="(async() => await DeleteEmployee(employee.EmpID))"><i class="oi oi-trash"></i></button>
+                        </div>
+                    </div>
                 </td>
-                <td>@employee.EmpID</td>
-                <td>@employee.LastName</td>
-                <td>@employee.FirstName</td>
-                <td>@employee.MiddleName</td>
-                <td>@employee.Department.Description</td>
-                <td>@employee.DepartmentSection.Description</td>
-                <td>@employee.DateOfBirth.ToString("dd/MMM/yyyy")</td>
+                <td class="columnWidth">@employee.EmpID</td>
+                <td class="columnWidth">@employee.LastName</td>
+                <td class="columnWidth">@employee.FirstName</td>
+                <td class="columnWidth">@employee.MiddleName</td>
+                <td class="columnWidth">@employee.Department.Description</td>
+                <td class="columnWidth">@employee.DepartmentSection.Description</td>
+                <td class="columnWidth">@employee.DateOfBirth.ToString("dd/MMM/yyyy")</td>
             </tr>
         }
     </tbody>
@@ -53,7 +58,13 @@
 <div>
     <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
 
-    @for (int i = CurPage; i <= TotalPages; i++)
+
+    @if (minRange != minPage)
+    {
+        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(minPage)">@minPage...</span>
+    }
+
+    @for (int i = minRange; i <= maxRange; i++)
     {
         int j = i;
         @if (i > 0)
@@ -67,8 +78,14 @@
                 <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
             }
         }
-
     }
+
+    @if (maxRange != maxPage)
+    {
+        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(maxPage)">...@maxPage</span>
+    }
+
+    
     <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
 </div>
 

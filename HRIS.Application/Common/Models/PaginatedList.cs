@@ -18,7 +18,7 @@ namespace HRIS.Application.Common.Models
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             TotalCount = count;
-            ItemCount = count;
+            ItemCount = items.Count;
             Items = items;
         }
 
