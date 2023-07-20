@@ -23,7 +23,9 @@ namespace HRISBlazorServerApp.Services
         public async virtual Task PrepareAuthenticatedClient()
         {
             var _serviceAPIOpts = _config.GetSection(nameof(ServiceAPIOptions)).Get<ServiceAPIOptions>();
+            
             var _accessToken = tokenProvider.AccessToken;
+            
             if(HttpClient.BaseAddress == null)
             {
                 HttpClient.BaseAddress = new Uri(_serviceAPIOpts.ApiBaseUrl);

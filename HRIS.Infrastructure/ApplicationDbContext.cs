@@ -3,6 +3,7 @@ using System.Reflection;
 using Duende.IdentityServer.EntityFramework.Options;
 using HRIS.Domain.Entities;
 using HRIS.Infrastructure.Identity;
+using HRIS.Infrastructure.Persistence.Configurations;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

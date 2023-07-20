@@ -19,7 +19,7 @@ namespace HRIS.Infrastructure.Persistence.Repositories
                                           dateTimeService,
                                           currentUserService)
         {
-            SetGetQuery(dbContext.Set<CivilStatus>());
+            SetGetQuery(dbContext.Set<CivilStatus>().Where(x => x.IsDeleted == false));
         }
     }
 }

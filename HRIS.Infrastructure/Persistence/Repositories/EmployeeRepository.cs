@@ -21,7 +21,7 @@ namespace HRIS.Infrastructure.Persistence.Repositories
         {
             _dbContext = dbContext;
             SetGetQuery(dbContext.Set<Employee>()
-                //.Where(x => x.IsDeleted == false)
+                .Where(x => x.IsDeleted == false)
                 );
         }
 

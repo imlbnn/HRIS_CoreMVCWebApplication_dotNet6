@@ -22,7 +22,8 @@ namespace HRIS.Infrastructure.Persistence.Repositories
                                                   currentUserService)
         {
             SetGetQuery(dbContext.Set<DepartmentalSection>()
-                .Include(a => a.Department));
+                .Include(a => a.Department)
+                .Where(x => x.IsDeleted == false));
         }
     }
 }
