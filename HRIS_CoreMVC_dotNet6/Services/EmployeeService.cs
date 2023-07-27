@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
-using HRISBlazorServerApp.Dtos.Employee;
-using HRISBlazorServerApp.Exceptions;
-using HRISBlazorServerApp.Interfaces.Services;
-using HRISBlazorServerApp.Models;
+using HRIS.Application.Common.Models;
+using HRIS.Application.Employees.Dtos.Queries;
+using HRIS_CoreMVC_dotNet6.Interfaces.Services;
+using HRIS_CoreMVC_dotNet6.Models;
+using HRIS_CoreMVC_dotNet6.Services;
+
+
 
 namespace HRISBlazorServerApp.Services.PageServices
 {
     public class EmployeeService : ApiServiceBase, IEmployeeService
     {
-        public EmployeeService(TokenProvider tokenProvider, HttpClient httpClient, IConfiguration config)
-            : base(tokenProvider, httpClient, config)
+        public EmployeeService(HttpClient httpClient, IConfiguration config)
+            : base(httpClient, config)
         {
         }
 
@@ -27,14 +30,7 @@ namespace HRISBlazorServerApp.Services.PageServices
             {
                 throw;
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (NotFoundException)
-            {
-                throw;
-            }
+           
             catch (Exception)
             {
                 throw;
@@ -55,14 +51,7 @@ namespace HRISBlazorServerApp.Services.PageServices
             {
                 throw;
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (NotFoundException)
-            {
-                throw;
-            }
+          
             catch (Exception)
             {
                 throw;
@@ -83,14 +72,7 @@ namespace HRISBlazorServerApp.Services.PageServices
             {
                 throw;
             }
-            catch (ValidationException ex)
-            {
-                throw;
-            }
-            catch (NotFoundException)
-            {
-                throw;
-            }
+            
             catch (Exception)
             {
                 throw;
@@ -111,14 +93,7 @@ namespace HRISBlazorServerApp.Services.PageServices
             {
                 throw;
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (NotFoundException)
-            {
-                throw;
-            }
+            
             catch (Exception)
             {
                 throw;
@@ -141,14 +116,7 @@ namespace HRISBlazorServerApp.Services.PageServices
             {
                 throw;
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (NotFoundException)
-            {
-                throw;
-            }
+           
             catch (Exception)
             {
                 throw;

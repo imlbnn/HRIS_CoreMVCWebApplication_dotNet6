@@ -17,6 +17,7 @@ namespace HRIS.API.Controllers
     public class EmployeeController : ApiControllerBase
     {
         [HttpGet]
+        [AllowAnonymous]
         [Route("paged")]
         //Run and use Postman to call this request
         public async Task<ActionResult<PaginatedList<GetEmployeesDto>>> GetEmployees([FromQuery] GetEmployeePaginatedQuery request)
@@ -34,6 +35,7 @@ namespace HRIS.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         //Run and use Postman to call this request
         public async Task<ActionResult<IEnumerable<GetEmployeesDto>>> GetEmployees()
         {
@@ -50,6 +52,7 @@ namespace HRIS.API.Controllers
         }
 
         [HttpGet("{empid}")]
+        [AllowAnonymous]
         //Run and use Postman to call this request
         public async Task<ActionResult<GetEmployeesDto>> GetEmployeeByEmpID(string empid)
         {
@@ -83,6 +86,7 @@ namespace HRIS.API.Controllers
 
 
         [HttpPost("create")]
+        [AllowAnonymous]
         //Run and use Postman to call this request
         public async Task<ActionResult<bool>> CreateEmployee(CreateEmployeeCommand request)
         {
@@ -98,6 +102,7 @@ namespace HRIS.API.Controllers
         }
 
         [HttpPut("update")]
+        [AllowAnonymous]
         //Run and use Postman to call this request
         public async Task<ActionResult<Tuple<bool, string>>> UpdateEmployee(UpdateEmployeeCommand request)
         {
@@ -114,6 +119,7 @@ namespace HRIS.API.Controllers
 
 
         [HttpPut("archive/{empid}")]
+        [AllowAnonymous]
         //Run and use Postman to call this request
         public async Task<ActionResult<CreateEmployeeDto>> ArchiveEmployee( string empid)
         {

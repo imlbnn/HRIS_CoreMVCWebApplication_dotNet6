@@ -3,7 +3,9 @@ using HRIS.Application.Common.Interfaces.Services;
 using HRIS.Infrastructure;
 using HRIS_CoreMVC_dotNet6.Helpers;
 using HRIS_CoreMVC_dotNet6.Interfaces;
+using HRIS_CoreMVC_dotNet6.Interfaces.Services;
 using HRIS_CoreMVC_dotNet6.Services;
+using HRISBlazorServerApp.Services.PageServices;
 using MediatR;
 using System.Reflection;
 
@@ -11,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -26,6 +27,7 @@ builder.Services.AddCors();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
