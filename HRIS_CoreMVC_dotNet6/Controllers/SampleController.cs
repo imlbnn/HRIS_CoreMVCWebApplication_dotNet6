@@ -28,7 +28,16 @@ namespace HRIS_CoreMVC_dotNet6.Controllers
                 if (!ModelState.IsValid) return View();
 
                 GetEmployeesDto model = new GetEmployeesDto();
-                model = await service.GetEmployeeByEmpID("040823-000000001");
+                model = await service.GetEmployeeByEmpID("");
+
+
+                IEnumerable<GetEmployeesDto> data;
+
+               // data = (await service.GetEmployees("",1,10)).Items;
+
+               //data.ForEach(x => x.FirstName = "");
+
+
 
                 TempData["IsHasError"] = false;
                 return View(model);
