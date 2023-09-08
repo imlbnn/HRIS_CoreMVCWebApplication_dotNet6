@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRIS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230220034821_InitializedDatabase")]
+    [Migration("20230827033301_InitializedDatabase")]
     partial class InitializedDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
